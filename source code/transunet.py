@@ -24,9 +24,9 @@ class V4Config:
     dz: float = 100.0
 
     encoder_channels: Tuple[int, ...] = (32, 64, 128, 256)
-    decoder_channels: Tuple[int, ...] = (64, 32, 32)
-    lifting_channels: int = 64
-    num_transformer_layers: int = 4
+    decoder_channels: Tuple[int, ...] = (192, 96, 48)
+    lifting_channels: int = 96
+    num_transformer_layers: int = 6
     num_heads: int = 8
     use_position_encoding: bool = True
     use_depth_attention: bool = True
@@ -2000,7 +2000,7 @@ class V4Trainer:
                 loss.backward()
                 self.optimizer.step()
 
-
+            self.scheduler.step()
 
             total_loss += loss.item()
             for k, v in losses.items():
@@ -2268,7 +2268,6 @@ class V4Trainer:
             self.train_set.set_epoch(epoch)
 
             train_loss, loss_components = self.train_epoch(epoch)
-            self.scheduler.step()
 
             if epoch <= 5:
                 loss_balancer.update(loss_components)
