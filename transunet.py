@@ -24,9 +24,9 @@ class V4Config:
     dz: float = 100.0
 
     encoder_channels: Tuple[int, ...] = (32, 64, 128, 256)
-    decoder_channels: Tuple[int, ...] = (192, 96, 48)
-    lifting_channels: int = 96
-    num_transformer_layers: int = 6
+    decoder_channels: Tuple[int, ...] = (64, 32, 32)
+    lifting_channels: int = 64
+    num_transformer_layers: int = 4
     num_heads: int = 8
     use_position_encoding: bool = True
     use_depth_attention: bool = True
