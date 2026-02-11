@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<VTKFile type="ImageData" version="0.1" byte_order="LittleEndian" header_type="UInt32" compressor="vtkZLibDataCompressor">
+  <ImageData WholeExtent="0 31 0 31 0 15" Origin="0 0 0" Spacing="100 100 100" Direction="1 0 0 0 1 0 0 0 1">
+    <Piece Extent="0 31 0 31 0 15"                                                    >
+      <PointData Scalars="Density">
+        <DataArray type="Float32" Name="Density" format="appended" RangeMin="-1"                   RangeMax="1"                    offset="0"                   />
+      </PointData>
+      <CellData>
+      </CellData>
+    </Piece>
+  </ImageData>
+  <AppendedData encoding="base64">
+   _AgAAAACAAAAAAAAAcgAAAHIAAAA=eJzt1bENwDAMA0FtltUyujdIFZCwfQeo/JaaAQAAAAAAAACAP73P9+n1J/cAt2rvr17v/wPktfdXr/f/AfLa+6vX+/8Aee391ev9f4C89v7q9f4/QF57f/V6/x8gr72/er3/DwAAAAAAAADAHhYoOD0feJzt1bENwDAMA0GNns2ymjdIFZCwfQeo/JaaAQAAAAAAAACAPz3v9+n1J/cAt2rvr17v/wPktfdXr/f/AfLa+6vX+/8Aee391ev9f4C89v7q9f4/QF57f/V6/x8gr72/er3/DwAAAAAAAADAHhZIdL0u
+  </AppendedData>
+</VTKFile>
