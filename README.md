@@ -1,7 +1,24 @@
-Operating system: Windows 10/11, Linux (Python 3.8+ and PyTorch environment are required).
+# Hybrid 2D–3D Transformer Network with Channel-to-Depth Lifting for Physics-Guided 3D Density Gravity Inversion
 
-File format requirements: this software adopts built-in generative learning mode, and no external input files are needed in the training stage. The program will automatically generate training samples containing three-dimensional density model and corresponding gravity anomaly data. In the stage of inferring the trained model, the input file only needs one gravity data file (.npy format or Tensor format matrix), which contains two-dimensional gridded gravity anomaly (Gz) or gradient data (Gzz).
+1. **Operating system**: Windows 10/11 or Linux (Python 3.8+ and PyTorch environment are required).
 
-Code description: "transunet.py" is a complete program. Just run this file to start. The code includes the functions of parameter setting, model training monitoring and result data visualization. The code is mainly divided into two parts.
-(1) The first part is "configuration and parameter setting" (corresponding to the V4Config class in the code). Here, you can select the grid parameters of gravity inversion, and set the grid dimension (default 16, 32, 32) and grid spacing (dx, dz) of the inversion area. You can also set deep learning calculation parameters, including learning rate, Batch Size and maximum number of training rounds (Epochs). In this section, we will also input physical constraint parameters, such as depth weighting index, physical consistency loss weight, edge enhancement coefficient, and geological model types (prism, sphere, fault, etc.) configured to automatically generate training data to train the model.
-(2) The second part is the "result output part", which runs automatically during and after the training. It includes the three-dimensional density data volume obtained by inversion (saved as the best model weight), the Learning Curves of loss function and the inversion accuracy index (Deep IoU) during training, as well as the density slice image, three-dimensional voxel rendering map and gravity anomaly fitting contrast map obtained by using the verification set in the inversion process to see how the model training is going.
+2. **File format requirements**: This software adopts a built-in generative learning mode; no external input files are needed during the training stage. The program automatically generates training samples containing 3D density models and corresponding gravity anomaly data. For inference with a trained model, the input file only requires one gravity data file (`.npy` format or Tensor format matrix), containing 2D gridded gravity anomaly (Gz) or gravity gradient data (Gzz).
+
+3. **Code description**: `transunet.py` is a self-contained, single-file program. Simply run this file to start training. The code includes parameter configuration, model training monitoring, and result visualization. The code is mainly divided into two parts:
+   - (1) The first part is **Configuration and Parameter Setting** (corresponding to the `V4Config` class in the code). Here, you can set the grid parameters of gravity inversion, including grid dimensions (default 16 × 32 × 32) and grid spacing (dx, dz). You can also set deep learning hyperparameters, including learning rate, batch size, and maximum number of training epochs. In addition, physics constraint parameters are configured here, such as depth weighting index, physics-consistency loss weight, edge enhancement coefficient, and geological model types (prism, sphere, fault, etc.) for automatic training data generation.
+   - (2) The second part is the **Result Output**, which runs automatically during and after training. It includes the 3D density volume obtained by inversion (saved as the best model checkpoint), the learning curves of loss function and inversion accuracy metric (Deep Anomaly IoU) during training, as well as density slice images, 3D voxel rendering, and gravity anomaly fitting comparison (observed vs. predicted) for monitoring training progress.
+
+4. **Quick start**:
+   ```bash
+   # Train the model with default settings
+   python transunet.py
+
+   # Train with custom parameters
+   python transunet.py --epochs 200 --batch_size 8 --lr 5e-6
+
+   # Resume training from a checkpoint
+   python transunet.py --resume path/to/checkpoint.pth
+
+   # Run gradient verification only
+   python transunet.py --verify-only
+   ```
