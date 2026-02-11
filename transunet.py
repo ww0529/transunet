@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 @dataclass
 class V4Config:
-    exp_name: str = "Gravity_Inversion_V4_PhysicsInformed"
+    exp_name: str = "Hybrid2D3D_CDL_TransNet"
 
     data_mode: str = 'joint'
 
@@ -59,7 +59,7 @@ class V4Config:
 
 
 class DifferentiableForward(nn.Module):
-    """可微分重力正演算子 - 用于物理一致性损 """
+    """Differentiable gravity forward operator for physics-consistency loss."""
 
     def __init__(self, shape: Tuple[int, int, int], dx: float, dz: float):
         super().__init__()
@@ -120,7 +120,7 @@ class DifferentiableForward(nn.Module):
 
 
 class FastGravityForward:
-    """快速正演（用于数据生成）"""
+    """Fast gravity forward modeling for data generation."""
 
     def __init__(self, shape: Tuple[int, int, int], dx: float, dz: float, mode: str = 'gz'):
         self.nz, self.ny, self.nx = shape
@@ -178,7 +178,7 @@ class FastGravityForward:
 
 
 class GeoModelGenerator:
-    """程序化地质模型生成器"""
+    """Procedural geological model generator."""
 
     def __init__(self, shape):
         self.nz, self.ny, self.nx = shape
@@ -227,7 +227,7 @@ class GeoModelGenerator:
         return model
 
     def generate_trapezoid(self):
-        """生成梯形体 - 模拟锐利边缘的地质体"""
+        """Generate trapezoid bodies simulating geological structures with sharp edges."""
         model = np.zeros(self.shape)
 
         z_start = np.random.randint(2, 6)
@@ -252,7 +252,7 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_staircase(self):
-        """阶梯体生成器 - 模拟逐层递进的地质结构"""
+        """Staircase body generator simulating progressive layered geological structures."""
         model = np.zeros(self.shape)
 
         num_steps = np.random.randint(4, 8)
@@ -284,7 +284,7 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_nested(self):
-        """镶嵌体生成器 - 盒中盒结构，训练边界识别"""
+        """Nested body generator with box-in-box structure for boundary recognition training."""
         model = np.zeros(self.shape)
 
         outer_density = np.random.uniform(0.3, 0.6)
@@ -305,7 +305,7 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_multiscale(self):
-        """多尺度块生成器 - 大中小块组合"""
+        """Multi-scale block generator combining large, medium, and small blocks."""
         model = np.zeros(self.shape)
 
         z0, z1 = 4, 12
@@ -332,7 +332,7 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_fault(self):
-        """断层结构生成器 - 斜切的地质断层"""
+        """Fault structure generator simulating oblique geological faults."""
         model = np.zeros(self.shape)
 
         fault_angle = np.random.uniform(30, 60)
@@ -357,7 +357,7 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_perlin_terrain(self):
-        """柏林噪声地形生成器 - 模拟自然地质变化"""
+        """Perlin noise terrain generator simulating natural geological variations."""
         from scipy.ndimage import gaussian_filter
 
         model = np.zeros(self.shape)
@@ -383,7 +383,7 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_fractal(self):
-        """分形结构生成器 - 模拟自相似地质结构"""
+        """Fractal structure generator simulating self-similar geological structures."""
         model = np.zeros(self.shape)
 
         def add_box(z0, z1, y0, y1, x0, x1, density, depth=0, max_depth=3):
@@ -590,7 +590,7 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_realistic_anomaly(self):
-        """真实异常体生成器 """
+        """Realistic anomalous body generator."""
         model = np.zeros(self.shape)
 
         main_cz = np.random.randint(2, 5)
@@ -627,7 +627,7 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def mixup_generator(self):
-        """混合生成器 - 包含真实场景模拟以改善Gzz反演"""
+        """Mixed generator including realistic scenario simulation for improved Gzz inversion."""
         generators = {
             'voronoi': (self.generate_voronoi, 0.03),
             'prism': (self.generate_prism, 0.16),
@@ -654,7 +654,7 @@ class GeoModelGenerator:
         return generators[choice][0]()
 
     def simple_generator(self):
-        """简单生成器 - 仅使用基础形状，用于课程学习初期"""
+        """Simple generator using only basic shapes for early-stage curriculum learning."""
         simple_generators = {
             'prism': (self.generate_prism, 0.35),
             'sphere': (self.generate_sphere, 0.25),
@@ -670,11 +670,11 @@ class GeoModelGenerator:
 
 
 class AdvancedAugmentation:
-    """高级数据增强"""
+    """Advanced data augmentation."""
 
     @staticmethod
     def elastic_deformation(density, alpha=30, sigma=4):
-        """弹性形变 - 模拟地质褶皱"""
+        """Elastic deformation simulating geological folding."""
         shape = density.shape
         dx = ndimage.gaussian_filter(np.random.randn(*shape) * alpha, sigma)
         dy = ndimage.gaussian_filter(np.random.randn(*shape) * alpha, sigma)
@@ -691,7 +691,7 @@ class AdvancedAugmentation:
 
     @staticmethod
     def depth_shift(density, max_shift=2):
-        """深度偏移"""
+        """Depth shift augmentation."""
         shift = np.random.randint(-max_shift, max_shift + 1)
         if shift == 0:
             return density
@@ -699,14 +699,14 @@ class AdvancedAugmentation:
 
     @staticmethod
     def add_geological_noise(density, noise_level=0.03):
-        """地质噪声"""
+        """Geological noise injection."""
         noise = np.random.randn(*density.shape) * noise_level
         noise = ndimage.gaussian_filter(noise, sigma=1)
         return np.clip(density + noise, -1, 1)
 
     @staticmethod
     def random_flip(density):
-        """随机翻转"""
+        """Random flip augmentation."""
         if np.random.rand() > 0.5:
             density = np.flip(density, axis=2).copy()
         if np.random.rand() > 0.5:
@@ -715,13 +715,13 @@ class AdvancedAugmentation:
 
     @staticmethod
     def random_scale(density, scale_range=(0.8, 1.2)):
-        """随机缩放密度值"""
+        """Random density value scaling."""
         scale = np.random.uniform(*scale_range)
         return np.clip(density * scale, -1, 1)
 
 
 class V4Dataset(Dataset):
-    """V4 数据集 - 支持高级增强和课程学习"""
+    """Dataset with support for advanced augmentation and curriculum learning."""
 
     def __init__(self, config: V4Config, epoch_len: int, mode: str = 'train'):
         self.config = config
@@ -734,7 +734,7 @@ class V4Dataset(Dataset):
         self.curriculum_threshold = 30
 
     def set_epoch(self, epoch: int):
-        """设置当前 epoch,用于课程学习"""
+        """Set the current epoch for curriculum learning scheduling."""
         self.current_epoch = epoch
 
     def _init_workers(self):
@@ -838,7 +838,7 @@ class SEBlock3D(nn.Module):
 
 
 class ResBlock2D(nn.Module):
-    """2D 残差块"""
+    """2D residual block."""
 
     def __init__(self, in_c, out_c, stride=1):
         super().__init__()
@@ -863,7 +863,7 @@ class ResBlock2D(nn.Module):
 
 
 class ResBlock3D(nn.Module):
-    """3D 残差块 with SE"""
+    """3D residual block with squeeze-and-excitation."""
 
     def __init__(self, in_c, out_c):
         super().__init__()
@@ -890,7 +890,7 @@ class ResBlock3D(nn.Module):
 
 
 class Encoder2D(nn.Module):
-    """2D Encoder - 提取表面场特征"""
+    """2D encoder for extracting surface field features."""
 
     def __init__(self, in_channels, channels=(32, 64, 128, 256)):
         super().__init__()
@@ -922,7 +922,7 @@ class Encoder2D(nn.Module):
 
 
 class ChannelToDepthLifting(nn.Module):
-    """将 2D 特征的通道维映射到 3D 的深度维"""
+    """Map 2D feature channels to the 3D depth dimension."""
 
     def __init__(self, in_channels, out_depth, out_channels):
         super().__init__()
@@ -941,7 +941,7 @@ class ChannelToDepthLifting(nn.Module):
 
 
 class Sinusoidal3DPositionEncoding(nn.Module):
-    """3D 正弦位置编码"""
+    """3D sinusoidal positional encoding."""
 
     def __init__(self, channels, max_len=64):
         super().__init__()
@@ -973,7 +973,7 @@ class Sinusoidal3DPositionEncoding(nn.Module):
 
 
 class DepthAttention(nn.Module):
-    """深度注意力机制"""
+    """Depth attention mechanism."""
 
     def __init__(self, channels, depth):
         super().__init__()
@@ -1038,7 +1038,7 @@ class TransformerBottleneck3D(nn.Module):
 
 
 class Decoder3D(nn.Module):
-    """3D Decoder - 只在 H/W 方向上采样,D 保持不变"""
+    """3D decoder with upsampling only in H/W dimensions while keeping D unchanged."""
 
     def __init__(self, in_channels, channels=(128, 64, 32), use_depth_attn=True, depth=16):
         super().__init__()
@@ -1096,7 +1096,7 @@ class Decoder3D(nn.Module):
 
 
 class CrossDimAttention(nn.Module):
-    """跨维度注意力模块 - 融合 2D 和 3D 特征"""
+    """Cross-dimensional attention module for fusing 2D and 3D features."""
 
     def __init__(self, channels_2d, channels_3d, depth):
         super().__init__()
@@ -1197,7 +1197,7 @@ class PhysicsInformedUNet(nn.Module):
 
 
 class Morphology3D(nn.Module):
-    """3D 形态学操作 (可微分近似)"""
+    """3D morphological operations (differentiable approximation)."""
 
     def __init__(self, kernel_size=3):
         super().__init__()
@@ -1205,24 +1205,24 @@ class Morphology3D(nn.Module):
         self.neg_pool = nn.MaxPool3d(kernel_size, stride=1, padding=kernel_size // 2)
 
     def dilate(self, x):
-        """膨胀操作"""
+        """Dilation operation."""
         return self.pool(x)
 
     def erode(self, x):
-        """腐蚀操作 (通过负值膨胀实现)"""
+        """Erosion operation (implemented via negated dilation)."""
         return -self.neg_pool(-x)
 
     def opening(self, x):
-        """开运算 (先腐蚀后膨胀) - 去除小噪声"""
+        """Opening operation (erosion followed by dilation) for noise removal."""
         return self.dilate(self.erode(x))
 
     def closing(self, x):
-        """闭运算 (先膨胀后腐蚀) - 填充小孔"""
+        """Closing operation (dilation followed by erosion) for hole filling."""
         return self.erode(self.dilate(x))
 
 
 class Discriminator3D(nn.Module):
-    """3D 判别器 - 用于对抗训练"""
+    """3D discriminator for adversarial training."""
 
     def __init__(self, in_channels=1):
         super().__init__()
@@ -1246,9 +1246,9 @@ class Discriminator3D(nn.Module):
 
 
 class UnsharpMask3D(nn.Module):
-    """3D Unsharp Mask 边界增强模块
+    """3D unsharp mask module for boundary enhancement.
 
-    通过减去模糊版本来增强边界:
+    Enhances boundaries by subtracting the blurred version:
     enhanced = original + amount * (original - blurred)
     """
 
@@ -1284,7 +1284,7 @@ class UnsharpMask3D(nn.Module):
 
 
 class DepthWeightedLoss(nn.Module):
-    """深度加权 MSE"""
+    """Depth-weighted MSE loss."""
 
     def __init__(self, beta=1.5, epsilon=0.1):
         super().__init__()
@@ -1305,7 +1305,7 @@ class DepthWeightedLoss(nn.Module):
 
 
 class ComprehensiveLoss(nn.Module):
-    """综合损失函数"""
+    """Comprehensive loss function."""
 
     def __init__(self, config: V4Config, forward_op: DifferentiableForward):
         super().__init__()
@@ -1315,7 +1315,7 @@ class ComprehensiveLoss(nn.Module):
         self.morphology = Morphology3D(kernel_size=3)
 
     def _gradient_loss(self, pred, target):
-        """梯度差异损失"""
+        """Gradient difference loss."""
 
         def get_grad(x):
             dz = torch.abs(x[:, :, 1:, :, :] - x[:, :, :-1, :, :])
@@ -1331,7 +1331,7 @@ class ComprehensiveLoss(nn.Module):
                 torch.mean((dx_p - dx_t) ** 2))
 
     def _edge_loss(self, pred, target):
-        """边缘增强损失 - 惩罚边缘模糊"""
+        """Edge enhancement loss penalizing blurred edges."""
 
         def compute_edge(x):
             dz = x[:, :, 1:, :, :] - x[:, :, :-1, :, :]
@@ -1356,7 +1356,7 @@ class ComprehensiveLoss(nn.Module):
         return loss_z + loss_y + loss_x
 
     def _morphology_loss(self, pred, target):
-        """形态学一致性损失 - 使用腐蚀膨胀约束形状"""
+        """Morphological consistency loss using erosion and dilation to constrain shape."""
         pred_opened = self.morphology.opening(pred)
         target_opened = self.morphology.opening(target)
 
@@ -1371,7 +1371,7 @@ class ComprehensiveLoss(nn.Module):
         return loss_open + loss_close + 0.5 * loss_match
 
     def _boundary_loss(self, pred, target):
-        """边界感知损失 - 使用 Sobel 算子检测边界并加强惩罚"""
+        """Boundary-aware loss using Sobel operator for boundary detection and enhanced penalization."""
 
         def sobel_3d(x):
             dz = torch.abs(x[:, :, 1:, :, :] - x[:, :, :-1, :, :])
@@ -1431,7 +1431,7 @@ class ComprehensiveLoss(nn.Module):
         return total, losses
 
     def _contrast_loss(self, pred, target):
-        """对比度损失 - 确保预测能区分不同密度区域"""
+        """Contrast loss ensuring the prediction can distinguish different density regions."""
         target_flat = target.view(target.size(0), -1)
         pred_flat = pred.view(pred.size(0), -1)
 
@@ -1454,9 +1454,9 @@ class ComprehensiveLoss(nn.Module):
 
 
 class AdaptiveLossBalancer:
-    """损失权重自适应平衡器
+    """Adaptive loss weight balancer.
 
-    在训练初期自动调整各损失项权重，使它们在同一数量级。
+    Automatically adjusts loss component weights during early training to keep them at the same order of magnitude.
     """
 
     def __init__(self, loss_names, target_scale=1.0, momentum=0.9):
@@ -1467,7 +1467,7 @@ class AdaptiveLossBalancer:
         self.initialized = False
 
     def update(self, losses: Dict[str, torch.Tensor]):
-        """更新运行时缩放因子"""
+        """Update running scale factors."""
         for name, loss in losses.items():
             if name not in self.running_scales:
                 continue
@@ -1489,7 +1489,7 @@ class AdaptiveLossBalancer:
         self.initialized = True
 
     def get_balanced_loss(self, losses: Dict[str, torch.Tensor]) -> torch.Tensor:
-        """返回平衡后的总损失"""
+        """Return the balanced total loss."""
         total = 0
         for name, loss in losses.items():
             scale = self.running_scales.get(name, 1.0)
@@ -1501,12 +1501,12 @@ class AdaptiveLossBalancer:
 
 
 def verify_gradient_flow(model, forward_op, device='cuda'):
-    """验证梯度流是否正确传播
+    """Verify that gradient flow propagates correctly.
 
-    检查物理损失是否能正确反向传播到模型参数
+    Checks whether the physics loss can correctly backpropagate to model parameters.
     """
     print("=" * 60)
-    print("梯度流验证 (Gradient Flow Verification)")
+    print("Gradient Flow Verification")
     print("=" * 60)
 
     model.train()
@@ -1534,13 +1534,13 @@ def verify_gradient_flow(model, forward_op, device='cuda'):
                 grad_info.append((name, grad_norm))
 
     if has_grad:
-        print("梯度流验证通过！物理损失可以正确反向传播。")
-        print(f"\n前 5 层梯度范数:")
+        print("Gradient flow verification passed. Physics loss backpropagates correctly.")
+        print(f"\nTop 5 layer gradient norms:")
         for name, norm in grad_info[:5]:
             print(f"  {name}: {norm:.6f}")
     else:
-        print(" 梯度流验证失败！物理损失无法反向传播。")
-        print(" 请检查 DifferentiableForward 是否使用了 numpy 或 detach 操作。")
+        print("Gradient flow verification FAILED. Physics loss cannot backpropagate.")
+        print("Please check if DifferentiableForward uses numpy or detach operations.")
 
     print("=" * 60)
     return has_grad
@@ -1550,7 +1550,7 @@ class V4Metrics:
 
     @staticmethod
     def deep_anomaly_iou(pred, target, depth_threshold=8, density_threshold=0.3):
-        """深层异常体 IoU"""
+        """Deep anomaly body IoU."""
         deep_pred = pred[:, :, depth_threshold:, :, :]
         deep_target = target[:, :, depth_threshold:, :, :]
 
@@ -1564,7 +1564,7 @@ class V4Metrics:
 
     @staticmethod
     def depth_wise_mse(pred, target):
-        """逐深度 MSE"""
+        """Per-depth MSE."""
         D = pred.shape[2]
         mse_per_depth = []
         for d in range(D):
@@ -1574,7 +1574,7 @@ class V4Metrics:
 
     @staticmethod
     def relative_error(pred, target):
-        """相对误差"""
+        """Relative error."""
         return (torch.abs(pred - target) / (torch.abs(target) + 1e-6)).mean().item()
 
 
@@ -1586,7 +1586,7 @@ class HighResVisualizer:
         self.upsampling = upsampling
 
     def _upsample(self, data: np.ndarray) -> np.ndarray:
-        """上采样以获得更平滑的可视化"""
+        """Upsample for smoother visualization."""
         from scipy.ndimage import zoom
         return zoom(data, self.upsampling, order=1)
 
@@ -1691,7 +1691,7 @@ class HighResVisualizer:
         return save_path
 
     def _plot_3d_slices(self, ax, density: np.ndarray, dx: float, dz: float, title: str):
-        """绘制 3D 平滑切片"""
+        """Plot 3D smooth slices."""
         nz, ny, nx = density.shape
 
         x = np.linspace(0, nx * dx / 1000, nx)
@@ -1732,7 +1732,7 @@ class HighResVisualizer:
 
     def _plot_voxel_body(self, ax, density: np.ndarray, dx: float, dz: float,
                          title: str, threshold: float = 0.3):
-        """绘制 3D 体素体"""
+        """Plot 3D voxel body."""
         nz, ny, nx = density.shape
 
         voxels = np.abs(density) > threshold
@@ -1758,7 +1758,7 @@ class HighResVisualizer:
 
 
 class V4Trainer:
-    """V4 训练器"""
+    """Trainer for the physics-informed inversion network."""
 
     def __init__(self, config: V4Config):
         self.config = config
@@ -1787,13 +1787,13 @@ class V4Trainer:
         print(f"Model parameters: {sum(p.numel() for p in self.model.parameters()):,}")
 
         if config.resume_path and os.path.exists(config.resume_path):
-            print(f"\n[微调模式] 正在加载预训练权重: {config.resume_path}")
+            print(f"\n[Fine-tune] Loading pretrained weights: {config.resume_path}")
             checkpoint = torch.load(config.resume_path, map_location=self.device, weights_only=False)
 
             if isinstance(checkpoint, dict):
                 if 'model_state_dict' in checkpoint:
                     state_dict = checkpoint['model_state_dict']
-                    print(f"  - 已从 checkpoint 中提取 'model_state_dict'")
+                    print(f"  - Extracted 'model_state_dict' from checkpoint")
                 elif 'state_dict' in checkpoint:
                     state_dict = checkpoint['state_dict']
                 else:
@@ -1802,10 +1802,10 @@ class V4Trainer:
                 state_dict = checkpoint
 
             missing, unexpected = self.model.load_state_dict(state_dict, strict=False)
-            print(f"  ✅ 权重加载成功!")
-            print(f"  - 缺失键: {len(missing)}, 多余键: {len(unexpected)}")
+            print(f"  Weights loaded successfully.")
+            print(f"  - Missing keys: {len(missing)}, Unexpected keys: {len(unexpected)}")
             if len(missing) > 0:
-                print(f"  - 缺失键 (前5个): {missing[:5]}")
+                print(f"  - Missing keys (first 5): {missing[:5]}")
             print()
 
         self.forward_op = DifferentiableForward(
@@ -1823,7 +1823,7 @@ class V4Trainer:
 
         self.optimizer_D = optim.AdamW(self.discriminator.parameters(), lr=config.lr * 0.5, weight_decay=1e-4)
 
-        # 使用余弦退火调度器替代固定学习率
+        # Cosine annealing scheduler
         self.scheduler = optim.lr_scheduler.CosineAnnealingLR(
             self.optimizer,
             T_max=config.epochs,
@@ -1859,7 +1859,7 @@ class V4Trainer:
             self._load_train_history()
     
     def _load_train_history(self):
-        """加载之前的训练历史（微调追加模式）"""
+        """Load previous training history for fine-tuning continuation."""
         import json
         try:
             with open(self.history_json_path, 'r') as f:
@@ -1876,29 +1876,29 @@ class V4Trainer:
             
             if len(self.train_history['epochs']) > 0:
                 self.start_epoch = max(self.train_history['epochs']) + 1
-                print(f"[微调模式] 已加载之前的训练历史 ({len(self.train_history['epochs'])} epochs)")
-                print(f"           将从 Epoch {self.start_epoch} 继续记录")
+                print(f"[Fine-tune] Loaded previous training history ({len(self.train_history['epochs'])} epochs)")
+                print(f"           Continuing from Epoch {self.start_epoch}")
         except Exception as e:
-            print(f"[警告] 加载训练历史失败: {e}，将从头开始记录")
+            print(f"[Warning] Failed to load training history: {e}, starting fresh")
 
     def _load_history_best(self):
-        """加载历史最佳记录"""
+        """Load historical best record."""
         import json
         if os.path.exists(self.history_file):
             try:
                 with open(self.history_file, 'r') as f:
                     data = json.load(f)
                 self.history_best_loss = data.get('best_loss', float('inf'))
-                print(f"[历史记录] 加载历史最佳: val_loss = {self.history_best_loss:.6f}")
-                print(f"           来自: {data.get('timestamp', 'unknown')}")
+                print(f"[History] Loaded historical best: val_loss = {self.history_best_loss:.6f}")
+                print(f"           From: {data.get('timestamp', 'unknown')}")
             except Exception as e:
-                print(f"[警告] 加载历史记录失败: {e}")
+                print(f"[Warning] Failed to load history record: {e}")
                 self.history_best_loss = float('inf')
         else:
-            print(f"[历史记录] 无历史记录，将创建新记录")
+            print(f"[History] No history found, creating new record")
 
     def _save_history_best(self, epoch, val_loss, deep_iou):
-        """保存历史最佳记录"""
+        """Save historical best record."""
         import json
         from datetime import datetime
         data = {
@@ -1916,11 +1916,11 @@ class V4Trainer:
         }
         with open(self.history_file, 'w') as f:
             json.dump(data, f, indent=2)
-        print(f"[历史记录] 已更新历史最佳: val_loss = {val_loss:.6f}")
+        print(f"[History] Updated historical best: val_loss = {val_loss:.6f}")
 
     @torch.no_grad()
     def visualize_sample(self, epoch: int):
-        """生成一个验证样本的可视化"""
+        """Generate visualization for a validation sample."""
         self.model.eval()
 
         inputs, targets, obs_gravity = next(iter(self.val_loader))
@@ -2053,10 +2053,10 @@ class V4Trainer:
         if is_history_best:
             torch.save(state, os.path.join(self.config.save_dir, 'best_model.pth'))
             self._save_history_best(epoch, loss, deep_iou)
-            print(f" 新的历史最佳模型! val_loss: {loss:.6f} (超越历史 {self.history_best_loss:.6f}) ")
+            print(f" New historical best model! val_loss: {loss:.6f} (surpassed {self.history_best_loss:.6f}) ")
 
     def plot_learning_curves(self):
-        """生成学习曲线图"""
+        """Generate learning curve plots."""
         import matplotlib
         matplotlib.use('Agg')
         import matplotlib.pyplot as plt
@@ -2089,7 +2089,7 @@ class V4Trainer:
         loss_components = self.train_history['loss_components']
         
         if len(epochs) == 0:
-            print("[Warning] 无训练历史数据，跳过曲线图生成")
+            print("[Warning] No training history data, skipping curve generation")
             return
         
         fig1, axes1 = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
@@ -2132,7 +2132,7 @@ class V4Trainer:
         fig1.savefig(save_path1, dpi=300, bbox_inches='tight', 
                     facecolor='white', edgecolor='none')
         plt.close(fig1)
-        print(f"  [1/3] 保存: {save_path1}")
+        print(f"  [1/3] Saved: {save_path1}")
         
         fig2, axes2 = plt.subplots(2, 3, figsize=(12, 6))
         fig2.subplots_adjust(hspace=0.35, wspace=0.28, left=0.08, right=0.96, 
@@ -2173,7 +2173,7 @@ class V4Trainer:
         fig2.savefig(save_path2, dpi=300, bbox_inches='tight',
                     facecolor='white', edgecolor='none')
         plt.close(fig2)
-        print(f"  [2/3] 保存: {save_path2}")
+        print(f"  [2/3] Saved: {save_path2}")
         
         fig3, axes3 = plt.subplots(1, 2, figsize=(10, 4))
         fig3.subplots_adjust(wspace=0.25, left=0.10, right=0.95, top=0.88, bottom=0.15)
@@ -2221,7 +2221,7 @@ class V4Trainer:
         fig3.savefig(save_path3, dpi=300, bbox_inches='tight',
                     facecolor='white', edgecolor='none')
         plt.close(fig3)
-        print(f"  [3/3] 保存: {save_path3}")
+        print(f"  [3/3] Saved: {save_path3}")
         
         import json
         history_path = os.path.join(self.config.save_dir, 'training_history.json')
@@ -2238,25 +2238,25 @@ class V4Trainer:
                 'best_iou_epoch': int(best_iou_epoch),
                 'best_deep_iou': float(best_iou),
             }, f, indent=2)
-        print(f"  [JSON] 保存: {history_path}")
+        print(f"  [JSON] Saved: {history_path}")
         
         print(f"\n{'='*60}")
-        print(f"学习曲线图生成完成！")
-        print(f"  - 总览图: {save_path1}")
-        print(f"  - 分量图: {save_path2}")
-        print(f"  - 分析图: {save_path3}")
-        print(f"  - 历史数据: {history_path}")
+        print(f"Learning curve generation complete.")
+        print(f"  - Overview: {save_path1}")
+        print(f"  - Components: {save_path2}")
+        print(f"  - Analysis: {save_path3}")
+        print(f"  - History data: {history_path}")
         print(f"{'='*60}\n")
 
     def train(self):
         print(f"Starting V4 Training on {self.device}")
         print(f"Config: {self.config}")
-        print(f"\n[历史最佳] 需要超越的目标: val_loss < {self.history_best_loss:.6f}")
+        print(f"\n[Historical best] Target to surpass: val_loss < {self.history_best_loss:.6f}")
 
-        print("\n[Pre-training] 验证梯度流...")
+        print("\n[Pre-training] Verifying gradient flow...")
         grad_ok = verify_gradient_flow(self.model, self.forward_op, self.device)
         if not grad_ok:
-            print("警告：梯度流验证失败，物理损失可能无效！\n")
+            print("Warning: Gradient flow verification failed, physics loss may be ineffective.\n")
 
         loss_balancer = AdaptiveLossBalancer(
             ['depth', 'focus', 'gdl', 'physics'],
@@ -2272,7 +2272,7 @@ class V4Trainer:
             if epoch <= 5:
                 loss_balancer.update(loss_components)
                 scales = loss_balancer.get_scales()
-                print(f"\n[Epoch {epoch}] 损失权重自适应:")
+                print(f"\n[Epoch {epoch}] Adaptive loss balancing:")
                 for name, scale in scales.items():
                     print(f"  {name}: {scale:.4f}")
 
@@ -2313,14 +2313,14 @@ class V4Trainer:
             print(f"  - GDL: {loss_components['gdl']:.4f}")
             print(f"  - Physics: {loss_components['physics']:.4f}")
             print(f"Val Loss: {val_loss:.4f} | Deep IoU: {deep_iou:.4f}")
-            print(f"本次最佳: {self.best_loss:.4f} | 历史最佳: {self.history_best_loss:.4f}")
+            print(f"Session best: {self.best_loss:.4f} | Historical best: {self.history_best_loss:.4f}")
             if is_history_best:
-                print(f" 突破历史记录")
+                print(f" New historical record!")
             print(f"{'=' * 60}\n")
 
-        print("\n[Training Complete] 学习曲线图...")
+        print("\n[Training Complete] Generating learning curves...")
         self.plot_learning_curves()
-        print("学习曲线图已保存!")
+        print("Learning curves saved.")
 
 
 def main():
@@ -2329,7 +2329,7 @@ def main():
     parser.add_argument('--batch_size', type=int, default=8)
     parser.add_argument('--lr', type=float, default=5e-6)
     parser.add_argument('--resume', type=str, default=None)
-    parser.add_argument('--verify-only', action='store_true', help='仅运行梯度验证')
+    parser.add_argument('--verify-only', action='store_true', help='Run gradient verification only')
     args = parser.parse_args()
 
     config = V4Config(
