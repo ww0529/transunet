@@ -9,18 +9,3 @@
     (1) The first part is **Configuration and Parameter Setting** (corresponding to the `V4Config` class in the code). Here, you can set the grid parameters of gravity inversion, including grid dimensions (default 16 × 32 × 32) and grid spacing (dx, dz). You can also set deep learning hyperparameters, including learning rate, batch size, and maximum number of training epochs. In addition, physics constraint parameters are configured here, such as depth weighting index, physics-consistency loss weight, edge enhancement coefficient, and geological model types (prism, sphere, fault, etc.) for automatic training data generation.
    
     (2) The second part is the **Result Output**, which runs automatically during and after training. It includes the 3D density volume obtained by inversion (saved as the best model checkpoint), the learning curves of loss function and inversion accuracy metric (Deep Anomaly IoU) during training, as well as density slice images, 3D voxel rendering, and gravity anomaly fitting comparison (observed vs. predicted) for monitoring training progress.
-
-5. **Quick start**:
-   ```bash
-   # Train the model with default settings
-   python transunet.py
-
-   # Train with custom parameters
-   python transunet.py --epochs 200 --batch_size 8 --lr 5e-6
-
-   # Resume training from a checkpoint
-   python transunet.py --resume path/to/checkpoint.pth
-
-   # Run gradient verification only
-   python transunet.py --verify-only
-   ```
