@@ -137,7 +137,7 @@ python examples/generate_vti_models.py
 ```
 
 Supported model types:
-- **Figure-8 Staircase**: Eight-character staircase model
+- **Complex Terrain**: Complex terrain model
 - **Center Prism**: Central prism model
 - **Dual Prism**: Dual prism model (positive-negative density contrast)
 
@@ -153,7 +153,7 @@ Supported model types:
 <img src="examples/example two/synthetic model.png" width="400">
 <img src="examples/example two/predicted model.png" width="400">
 
-### Example Three: Figure-8 Staircase Model
+### Example Three: Complex Terrain Model
 
 <img src="examples/example three/Real the Eight-Character Step Pattern.png" width="400">
 <img src="examples/example three/predicted model.png" width="400">
