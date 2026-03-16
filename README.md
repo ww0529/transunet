@@ -2,77 +2,77 @@
 
 <img src="https://raw.githubusercontent.com/your-repo/transunet/master/logo.png" width="300">
 
-## 描述
+## Description
 
-TransUNet 是一个基于混合 2D-3D Transformer 网络的深度学习模块，用于物理约束的三维密度重力反演。该模型采用通道到深度提升（Channel-to-Depth Lifting, CDL）机制，将 2D 重力异常数据转换为 3D 密度模型。
+TransUNet is a deep learning module based on a hybrid 2D-3D Transformer network for physics-constrained 3D density gravity inversion. The model employs a Channel-to-Depth Lifting (CDL) mechanism to transform 2D gravity anomaly data into 3D density models.
 
-核心创新包括：
-- **混合 2D-3D 架构**：结合 2D 卷积编码器和 3D Transformer 解码器
-- **通道到深度提升**：创新的特征提升机制，将 2D 特征转换为 3D 表示
-- **物理约束**：集成重力正演算子，确保反演结果的物理一致性
-- **深度加权**：考虑深度敏感性的加权机制
-- **边界增强**：改进边界识别能力
+Core innovations include:
+- **Hybrid 2D-3D Architecture**: Combines 2D convolutional encoder with 3D Transformer decoder
+- **Channel-to-Depth Lifting**: Novel feature lifting mechanism that transforms 2D features into 3D representations
+- **Physics Constraints**: Integrates differentiable gravity forward operator ensuring physical consistency
+- **Depth Weighting**: Weighted mechanism accounting for depth sensitivity
+- **Edge Enhancement**: Improved boundary identification capability
 
-## 安装
+## Installation
 
-### 系统要求
-- **操作系统**：Windows 10/11 或 Linux
-- **Python**：3.8+
-- **深度学习框架**：PyTorch（CUDA 支持推荐）
+### System Requirements
+- **Operating System**: Windows 10/11 or Linux
+- **Python**: 3.8+
+- **Deep Learning Framework**: PyTorch (CUDA support recommended)
 
-### 依赖安装
+### Dependencies Installation
 
 ```bash
 pip install torch torchvision torchaudio
 pip install numpy scipy matplotlib scikit-image
-pip install vtk  # 用于 VTI 模型生成和可视化
+pip install vtk  # For VTI model generation and visualization
 ```
 
-## 文件格式要求
+## File Format Requirements
 
-### 训练阶段
-该软件采用内置生成学习模式，训练阶段无需外部输入文件。程序自动生成包含以下内容的训练样本：
-- 3D 密度模型（支持多种地质模型类型）
-- 对应的重力异常数据
+### Training Stage
+The software adopts a built-in generative learning mode; no external input files are needed during training. The program automatically generates training samples containing:
+- 3D density models (supporting multiple geological model types)
+- Corresponding gravity anomaly data
 
-### 推理阶段
-输入文件仅需一个重力数据文件，格式要求：
-- **格式**：`.npy` 格式或 Tensor 格式矩阵
-- **数据类型**：2D 网格化重力异常数据（Gz）或重力梯度数据（Gzz）
-- **维度**：与配置中的网格参数一致
+### Inference Stage
+Input files require only one gravity data file with the following specifications:
+- **Format**: `.npy` format or Tensor format matrix
+- **Data Type**: 2D gridded gravity anomaly data (Gz) or gravity gradient data (Gzz)
+- **Dimensions**: Consistent with grid parameters in configuration
 
-## 代码结构
+## Code Structure
 
-该项目是一个自包含的单文件程序，主要分为两部分：
+The project is a self-contained single-file program, divided into two main parts:
 
-### (1) 配置与参数设置
+### (1) Configuration and Parameter Setting
 
-对应代码中的 `V4Config` 类，包括：
+Corresponds to the `V4Config` class in the code, including:
 
-**网格参数**
+**Grid Parameters**
 ```python
-grid_shape: Tuple[int, int, int] = (16, 32, 32)  # 网格维度 (深度, 北向, 东向)
-dx: float = 100.0                                  # 水平网格间距 (m)
-dz: float = 100.0                                  # 深度网格间距 (m)
+grid_shape: Tuple[int, int, int] = (16, 32, 32)  # Grid dimensions (depth, north, east)
+dx: float = 100.0                                  # Horizontal grid spacing (m)
+dz: float = 100.0                                  # Depth grid spacing (m)
 ```
 
-**深度学习超参数**
+**Deep Learning Hyperparameters**
 ```python
-lr: float = 5e-4                    # 学习率
-batch_size: int = 8                # 批大小
-epochs: int = 400                  # 最大训练轮数
-steps_per_epoch: int = 500         # 每轮迭代步数
+lr: float = 5e-4                    # Learning rate
+batch_size: int = 8                # Batch size
+epochs: int = 400                  # Maximum training epochs
+steps_per_epoch: int = 500         # Iteration steps per epoch
 ```
 
-**物理约束参数**
+**Physics Constraint Parameters**
 ```python
-w_depth: float = 1.0               # 深度加权指数
-w_physics: float = 0.3             # 物理一致性损失权重
-w_edge: float = 0.3                # 边界增强系数
-w_focus: float = 0.3               # 焦点损失权重
+w_depth: float = 1.0               # Depth weighting index
+w_physics: float = 0.3             # Physics consistency loss weight
+w_edge: float = 0.3                # Edge enhancement coefficient
+w_focus: float = 0.3               # Focus loss weight
 ```
 
-**模型架构参数**
+**Model Architecture Parameters**
 ```python
 encoder_channels: Tuple[int, ...] = (32, 64, 128, 256)
 decoder_channels: Tuple[int, ...] = (128, 64, 32)
@@ -81,187 +81,187 @@ num_transformer_layers: int = 6
 num_heads: int = 8
 ```
 
-### (2) 结果输出
+### (2) Result Output
 
-训练过程中和训练后自动运行，包括：
+Automatically runs during and after training, including:
 
-- **最优模型检查点**：3D 密度体积反演结果
-- **学习曲线**：
-  - 损失函数曲线
-  - 反演精度指标曲线（Deep Anomaly IoU）
-- **可视化结果**：
-  - 密度切片图像
-  - 3D 体素渲染
-  - 重力异常拟合对比（观测 vs 预测）
+- **Optimal Model Checkpoint**: 3D density volume inversion results
+- **Learning Curves**:
+  - Loss function curves
+  - Inversion accuracy metric curves (Deep Anomaly IoU)
+- **Visualization Results**:
+  - Density slice images
+  - 3D voxel rendering
+  - Gravity anomaly fitting comparison (observed vs. predicted)
 
-## 使用方法
+## Usage
 
-### 基本训练流程
+### Basic Training Workflow
 
 ```python
 from train_code import TransUNetTrainer
 from config import V4Config
 
-# 创建配置
+# Create configuration
 config = V4Config()
 
-# 初始化训练器
+# Initialize trainer
 trainer = TransUNetTrainer(config)
 
-# 开始训练
+# Start training
 trainer.train()
 ```
 
-### 自定义配置示例
+### Custom Configuration Example
 
 ```python
 from config import V4Config
 
 config = V4Config(
-    grid_shape=(16, 32, 32),      # 网格维度
-    dx=100.0,                      # 水平间距
-    dz=100.0,                      # 深度间距
-    batch_size=16,                 # 增加批大小
-    epochs=500,                    # 增加训练轮数
-    lr=1e-3,                       # 调整学习率
-    w_physics=0.5,                 # 增加物理约束权重
+    grid_shape=(16, 32, 32),      # Grid dimensions
+    dx=100.0,                      # Horizontal spacing
+    dz=100.0,                      # Depth spacing
+    batch_size=16,                 # Increase batch size
+    epochs=500,                    # Increase training epochs
+    lr=1e-3,                       # Adjust learning rate
+    w_physics=0.5,                 # Increase physics constraint weight
 )
 ```
 
-### 生成测试模型
+### Generate Test Models
 
-项目包含 VTI 模型生成工具，用于创建合成地质模型：
+The project includes a VTI model generation tool for creating synthetic geological models:
 
 ```bash
 python examples/generate_vti_models.py
 ```
 
-支持的模型类型：
-- **Figure-8 Staircase**：八字形阶梯模型
-- **Center Prism**：中心棱柱体模型
-- **Dual Prism**：双棱柱体模型（正负密度对比）
+Supported model types:
+- **Figure-8 Staircase**: Eight-character staircase model
+- **Center Prism**: Central prism model
+- **Dual Prism**: Dual prism model (positive-negative density contrast)
 
-## 示例结果
+## Example Results
 
-### 示例一：合成模型反演
+### Example One: Synthetic Model Inversion
 
 <img src="examples/example one/synthetic model.png" width="400">
 <img src="examples/example one/predicted model.png" width="400">
 
-### 示例二：复杂地质结构
+### Example Two: Complex Geological Structure
 
 <img src="examples/example two/synthetic model.png" width="400">
 <img src="examples/example two/predicted model.png" width="400">
 
-### 示例三：八字形阶梯模型
+### Example Three: Figure-8 Staircase Model
 
 <img src="examples/example three/Real the Eight-Character Step Pattern.png" width="400">
 <img src="examples/example three/predicted model.png" width="400">
 
-### 实际数据应用
+### Real Data Application
 
 <img src="Field data example/predicted_density_model.png" width="400">
 
-## 核心特性
+## Core Features
 
-### 1. 混合 2D-3D 架构
-- 2D 编码器：高效提取水平特征
-- 3D Transformer 解码器：捕捉深度依赖关系
-- 通道到深度提升：创新的特征维度转换机制
+### 1. Hybrid 2D-3D Architecture
+- 2D Encoder: Efficiently extracts horizontal features
+- 3D Transformer Decoder: Captures depth dependencies
+- Channel-to-Depth Lifting: Novel feature dimension transformation mechanism
 
-### 2. 物理约束
-- 集成可微分重力正演算子
-- 物理一致性损失函数
-- 确保反演结果满足重力场方程
+### 2. Physics Constraints
+- Integrated differentiable gravity forward operator
+- Physics consistency loss function
+- Ensures inversion results satisfy gravity field equations
 
-### 3. 深度敏感性处理
-- 深度加权机制
-- 焦点损失函数
-- 改进深层异常识别能力
+### 3. Depth Sensitivity Handling
+- Depth weighting mechanism
+- Focus loss function
+- Improved deep anomaly identification capability
 
-### 4. 边界增强
-- 边界检测模块
-- 边界增强损失
-- 提高异常体边界清晰度
+### 4. Edge Enhancement
+- Boundary detection module
+- Edge enhancement loss
+- Improves boundary clarity of anomalous bodies
 
-### 5. 数据增强
-- 弹性变形增强
-- 多种几何变换
-- 提高模型泛化能力
+### 5. Data Augmentation
+- Elastic deformation augmentation
+- Multiple geometric transformations
+- Improves model generalization capability
 
-## 技术细节
+## Technical Details
 
-### 重力正演算子
+### Gravity Forward Operator
 
-采用频域方法实现可微分的重力正演：
+Implements differentiable gravity forward computation using frequency domain methods:
 
 ```python
 class DifferentiableForward(nn.Module):
-    """可微分重力正演算子，用于物理一致性损失"""
+    """Differentiable gravity forward operator for physics consistency loss"""
 
     def __init__(self, shape, dx, dz):
-        # 基于 FFT 的高效计算
-        # 支持批处理和自动微分
+        # FFT-based efficient computation
+        # Supports batch processing and automatic differentiation
 ```
 
-### Transformer 编码器
+### Transformer Encoder
 
-采用多头自注意力机制：
-- 层数：6 层
-- 注意力头数：8
-- 位置编码：支持
-- 深度注意力：支持
+Employs multi-head self-attention mechanism:
+- Layers: 6
+- Attention Heads: 8
+- Position Encoding: Supported
+- Depth Attention: Supported
 
-### 损失函数
+### Loss Functions
 
-多任务学习框架：
-- L1 损失：基础重建损失
-- 物理一致性损失：重力场约束
-- 深度加权损失：深度敏感性
-- 焦点损失：难样本挖掘
-- 边界增强损失：边界清晰度
-- 形态学损失：结构约束
+Multi-task learning framework:
+- L1 Loss: Basic reconstruction loss
+- Physics Consistency Loss: Gravity field constraint
+- Depth Weighted Loss: Depth sensitivity
+- Focus Loss: Hard sample mining
+- Edge Enhancement Loss: Boundary clarity
+- Morphological Loss: Structure constraint
 
-## 性能指标
+## Performance Metrics
 
-### 评估指标
-- **Deep Anomaly IoU**：异常体交并比
-- **RMSE**：均方根误差
-- **相关系数**：重力异常拟合度
+### Evaluation Metrics
+- **Deep Anomaly IoU**: Anomaly body intersection over union
+- **RMSE**: Root mean square error
+- **Correlation Coefficient**: Gravity anomaly fitting degree
 
-### 典型性能
-- 网格分辨率：16 × 32 × 32
-- 推理时间：< 100ms（单样本）
-- 内存占用：< 4GB（训练）
+### Typical Performance
+- Grid Resolution: 16 × 32 × 32
+- Inference Time: < 100ms (single sample)
+- Memory Usage: < 4GB (training)
 
-## 常见问题
+## FAQ
 
-### Q: 如何处理不同大小的网格？
-A: 修改 `V4Config` 中的 `grid_shape` 参数，模型会自动适应。
+### Q: How to handle different grid sizes?
+A: Modify the `grid_shape` parameter in `V4Config`, the model will automatically adapt.
 
-### Q: 如何调整物理约束的强度？
-A: 通过 `w_physics` 参数控制，范围通常为 0.1-1.0。
+### Q: How to adjust the strength of physics constraints?
+A: Control via the `w_physics` parameter, typically ranging from 0.1-1.0.
 
-### Q: 支持 GPU 加速吗？
-A: 是的，代码自动检测 CUDA 可用性，优先使用 GPU。
+### Q: Does it support GPU acceleration?
+A: Yes, the code automatically detects CUDA availability and prioritizes GPU usage.
 
-### Q: 如何使用自己的重力数据进行反演？
-A: 准备 `.npy` 格式的 2D 重力异常数据，按照推理阶段的格式要求输入。
+### Q: How to perform inversion with my own gravity data?
+A: Prepare 2D gravity anomaly data in `.npy` format and input according to the inference stage format requirements.
 
-## 许可证
+## License
 
-该项目采用 Apache License 2.0 许可证。详见 LICENSE 文件。
+This project is licensed under the Apache License 2.0. See the LICENSE file for details.
 
-## 引用
+## Citation
 
-如果你在研究中使用了本项目，请引用以下论文：
+If you use this project in your research, please consider citing the following papers:
 
-[待补充相关论文引用]
+[Related paper citations to be added]
 
-## 致谢
+## Acknowledgments
 
-感谢所有贡献者和测试人员的支持。
+Thanks to all contributors and testers for their support.
 
-## 联系方式
+## Contact
 
-如有问题或建议，欢迎提交 Issue 或 Pull Request。
+For questions or suggestions, feel free to submit an Issue or Pull Request.
