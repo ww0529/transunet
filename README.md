@@ -252,12 +252,6 @@ A: Prepare 2D gravity anomaly data in `.npy` format and input according to the i
 
 This project is licensed under the Apache License 2.0. See the LICENSE file for details.
 
-## Citation
-
-If you use this project in your research, please consider citing the following papers:
-
-[Related paper citations to be added]
-
 ## Acknowledgments
 
 Thanks to all contributors and testers for their support.
