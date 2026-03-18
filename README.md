@@ -1,261 +1,320 @@
-# Hybrid 2D–3D Transformer Network with Channel-to-Depth Lifting for Physics-Guided 3D Density Gravity Inversion
+# Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion
 
-<img src="https://raw.githubusercontent.com/your-repo/transunet/master/logo.png" width="300">
+This repository implements a physics-guided deep learning workflow for reconstructing 3D density contrast models from gravity observations. The method combines a 2D residual encoder, a channel-to-depth lifting module, a 3D Transformer bottleneck, cross-dimensional attention, and a differentiable gravity forward operator. The methodological description below follows the manuscript draft `A Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion(2).docx`, while the commands, defaults, and implementation notes are taken from the current codebase in this repository.
 
-## Description
+The repository already includes:
 
-TransUNet is a deep learning module based on a hybrid 2D-3D Transformer network for physics-constrained 3D density gravity inversion. The model employs a Channel-to-Depth Lifting (CDL) mechanism to transform 2D gravity anomaly data into 3D density models.
+- a pretrained checkpoint: `best_model.pth`
+- synthetic `.vti` examples in `examples/`
+- saved folder-based validation outputs in `folder_validation_results/`
+- saved field-data outputs in `batch_test_results/`
 
-Core innovations include:
-- **Hybrid 2D-3D Architecture**: Combines 2D convolutional encoder with 3D Transformer decoder
-- **Channel-to-Depth Lifting**: Novel feature lifting mechanism that transforms 2D features into 3D representations
-- **Physics Constraints**: Integrates differentiable gravity forward operator ensuring physical consistency
-- **Depth Weighting**: Weighted mechanism accounting for depth sensitivity
-- **Edge Enhancement**: Improved boundary identification capability
+<p align="center">
+  <img src="batch_test_results/examples/synthetic_model_inversion/comparison.png" width="92%" alt="Synthetic example comparison">
+</p>
+
+<p align="center">
+  <img src="batch_test_results/field_data/gzz/prediction.png" width="92%" alt="Field-data prediction">
+</p>
+
+## Highlights
+
+- Hybrid 2D-to-3D inversion network for volumetric density reconstruction
+- Joint input mode using `Gz`, `Gzz`, and normalized depth encoding
+- Channel-to-depth lifting to convert 2D latent features into a 3D seed volume
+- 3D Transformer bottleneck with sinusoidal position encoding and depth attention
+- Physics-guided training with a differentiable gravity forward operator
+- On-the-fly synthetic data generation with curriculum learning and augmentation
+- Included checkpoint, example models, validation metrics, and visualization outputs
+
+## Repository Structure
+
+```text
+.
+|-- source code/
+|   |-- config.py               # Default configuration and hyperparameters
+|   |-- data_preparation.py     # Synthetic model generation, augmentation, forward modeling
+|   `-- train_code.py           # Network, loss, trainer, and visualization
+|-- examples/                   # Bundled .vti synthetic examples and figure assets
+|-- Field data example/         # Example field Gzz grid and predicted density figure
+|-- folder_validation_test.py   # Evaluate a checkpoint on .vti models in folders
+|-- folder_validation_results/  # Saved validation outputs for bundled examples
+|-- batch_test_results/         # Saved synthetic and field-data prediction outputs
+|-- best_model.pth              # Included pretrained checkpoint
+`-- README.md
+```
+
+## Method Overview
+
+### 1. Input representation
+
+The default training mode is `joint`. For each sample, the code constructs a volumetric input tensor with shape `[B, 3, D, H, W]`:
+
+- channel 1: normalized `Gz`
+- channel 2: normalized `Gzz`
+- channel 3: normalized depth coordinate `z in [0, 1]`
+
+With the default configuration:
+
+- `D = 16`
+- `H = W = 32`
+- `dx = dz = 100 m`
+
+In `gz` mode, the input shape becomes `[B, 2, D, H, W]` and omits the `Gzz` channel.
+
+### 2. Network architecture
+
+The current implementation in [`source code/train_code.py`](source%20code/train_code.py) follows this high-level flow:
+
+1. A shared 2D residual encoder processes each depth slice of the repeated input volume.
+2. Slice-wise latent features are aggregated across depth.
+3. `ChannelToDepthLifting` converts the 2D latent map into a coarse 3D feature volume.
+4. A 3D Transformer bottleneck refines the volume with global spatial context.
+5. `CrossDimAttention` injects high-level 2D features back into the 3D pathway.
+6. A 3D decoder upsamples laterally to produce the final density volume.
+7. An unsharp-mask module sharpens the predicted boundaries.
+
+Default architectural settings from [`source code/config.py`](source%20code/config.py):
+
+| Parameter | Value |
+|---|---:|
+| `grid_shape` | `(16, 32, 32)` |
+| `encoder_channels` | `(32, 64, 128, 256)` |
+| `decoder_channels` | `(128, 64, 32)` |
+| `lifting_channels` | `64` |
+| `num_transformer_layers` | `4` |
+| `num_heads` | `8` |
+| `use_position_encoding` | `True` |
+| `use_depth_attention` | `True` |
+
+### 3. Training objective
+
+The manuscript emphasizes five principal loss terms: physics consistency, depth weighting, focal weighting, gradient-difference regularization, and edge enhancement. The current implementation keeps those core terms and adds several extra regularizers.
+
+The implemented total loss is:
+
+```text
+L_total =
+    w_depth    * L_depth
+  + w_focus    * L_focus
+  + w_gdl      * L_gdl
+  + w_physics  * L_physics
+  + w_edge     * L_edge
+  + w_l1       * L_l1
+  + w_morph    * L_morph
+  + w_boundary * L_boundary
+```
+
+Core terms, following the manuscript and the code:
+
+- `L_physics`: mean-squared error between observed gravity and forward-modeled gravity from the predicted density volume
+- `L_depth`: depth-weighted MSE with weights proportional to `(z + epsilon)^beta`
+- `L_focus`: anomaly-focused weighted MSE using `1 + beta_f * |rho_true|`
+- `L_gdl`: gradient-difference loss on 3D density gradients
+- `L_edge`: edge-enhancement loss that emphasizes boundary mismatch along the three axes
+
+Additional implementation terms:
+
+- `L_l1`: sparsity-style penalty on predicted density magnitude
+- `L_morph`: morphology regularization using differentiable opening and closing
+- `L_boundary`: explicit boundary sharpening loss with normalized edge weights
+
+Implementation detail: the code also uses an `AdaptiveLossBalancer` to keep different loss components on comparable scales throughout training.
+
+Default loss-related parameters:
+
+| Parameter | Value |
+|---|---:|
+| `w_depth` | `1.0` |
+| `w_focus` | `1.0` |
+| `w_gdl` | `1.5` |
+| `w_physics` | `0.3` |
+| `w_edge` | `0.5` |
+| `w_l1` | `0.05` |
+| `w_morph` | `0.05` |
+| `w_boundary` | `0.5` |
+| `depth_beta` | `2.0` |
+| `focus_beta` | `10.0` |
+
+Important note: in the current code, the differentiable physics-consistency term is computed against `Gz`. In `joint` mode, `Gzz` is used as an additional input channel, but the physics loss itself is driven by the forward-modeled `Gz` response.
+
+## Data Generation and Training Data
+
+Training data are generated on the fly in [`source code/data_preparation.py`](source%20code/data_preparation.py), so no prebuilt training dataset is required.
+
+The generator mixes a wide range of synthetic geological bodies, including:
+
+- prisms
+- spheres
+- trapezoids
+- staircase bodies
+- nested bodies
+- multiscale blocky structures
+- faults
+- Perlin-like terrain models
+- fractal bodies
+- figure-eight staircase patterns
+- separated prisms
+- hollow boxes
+- layered density models
+- scattered anomalies
+- more realistic mixed anomalies
+
+The dataset logic also includes:
+
+- curriculum learning for the first `30` epochs
+- random flips
+- random density scaling
+- elastic deformation
+- depth shifting
+- geological noise injection
+- `1%` to `5%` observation noise on synthetic gravity data
+
+## Training Defaults
+
+The main training defaults from [`source code/config.py`](source%20code/config.py) are:
+
+| Parameter | Value |
+|---|---:|
+| `data_mode` | `joint` |
+| `lr` | `5e-4` |
+| `batch_size` | `8` |
+| `epochs` | `400` |
+| `steps_per_epoch` | `500` |
+| optimizer | `AdamW` |
+| weight decay | `1e-4` |
+| scheduler | `CosineAnnealingLR` |
+| scheduler minimum LR | `1e-6` |
+| mixed precision | enabled on CUDA |
 
 ## Installation
 
-### System Requirements
-- **Operating System**: Windows 10/11 or Linux
-- **Python**: 3.8+
-- **Deep Learning Framework**: PyTorch (CUDA support recommended)
-
-### Dependencies Installation
+The project does not currently ship with a `requirements.txt`, so install the main dependencies manually:
 
 ```bash
-pip install torch torchvision torchaudio
-pip install numpy scipy matplotlib scikit-image
-pip install vtk  # For VTI model generation and visualization
+pip install torch numpy scipy matplotlib vtk
 ```
 
-## File Format Requirements
+Notes:
 
-### Training Stage
-The software adopts a built-in generative learning mode; no external input files are needed during training. The program automatically generates training samples containing:
-- 3D density models (supporting multiple geological model types)
-- Corresponding gravity anomaly data
-
-### Inference Stage
-Input files require only one gravity data file with the following specifications:
-- **Format**: `.npy` format or Tensor format matrix
-- **Data Type**: 2D gridded gravity anomaly data (Gz) or gravity gradient data (Gzz)
-- **Dimensions**: Consistent with grid parameters in configuration
-
-## Code Structure
-
-The project is a self-contained single-file program, divided into two main parts:
-
-### (1) Configuration and Parameter Setting
-
-Corresponds to the `V4Config` class in the code, including:
-
-**Grid Parameters**
-```python
-grid_shape: Tuple[int, int, int] = (16, 32, 32)  # Grid dimensions (depth, north, east)
-dx: float = 100.0                                  # Horizontal grid spacing (m)
-dz: float = 100.0                                  # Depth grid spacing (m)
-```
-
-**Deep Learning Hyperparameters**
-```python
-lr: float = 5e-4                    # Learning rate
-batch_size: int = 8                # Batch size
-epochs: int = 400                  # Maximum training epochs
-steps_per_epoch: int = 500         # Iteration steps per epoch
-```
-
-**Physics Constraint Parameters**
-```python
-w_depth: float = 1.0               # Depth weighting index
-w_physics: float = 0.3             # Physics consistency loss weight
-w_edge: float = 0.3                # Edge enhancement coefficient
-w_focus: float = 0.3               # Focus loss weight
-```
-
-**Model Architecture Parameters**
-```python
-encoder_channels: Tuple[int, ...] = (32, 64, 128, 256)
-decoder_channels: Tuple[int, ...] = (128, 64, 32)
-lifting_channels: int = 64
-num_transformer_layers: int = 6
-num_heads: int = 8
-```
-
-### (2) Result Output
-
-Automatically runs during and after training, including:
-
-- **Optimal Model Checkpoint**: 3D density volume inversion results
-- **Learning Curves**:
-  - Loss function curves
-  - Inversion accuracy metric curves (Deep Anomaly IoU)
-- **Visualization Results**:
-  - Density slice images
-  - 3D voxel rendering
-  - Gravity anomaly fitting comparison (observed vs. predicted)
+- `vtk` is required for reading bundled `.vti` models during folder-based validation.
+- A CUDA-enabled PyTorch build is recommended for training.
 
 ## Usage
 
-### Basic Training Workflow
+### 1. Set a writable checkpoint directory
+
+Before training, update `save_dir` in [`source code/config.py`](source%20code/config.py), because the current default path is machine-specific:
 
 ```python
-from train_code import TransUNetTrainer
-from config import V4Config
-
-# Create configuration
-config = V4Config()
-
-# Initialize trainer
-trainer = TransUNetTrainer(config)
-
-# Start training
-trainer.train()
+save_dir: str = "/home/jszxgx/ysw/deeplearn/checkpoints_v4_new"
 ```
 
-### Custom Configuration Example
+Change it to a valid local path on your machine.
 
-```python
-from config import V4Config
+### 2. Train the model
 
-config = V4Config(
-    grid_shape=(16, 32, 32),      # Grid dimensions
-    dx=100.0,                      # Horizontal spacing
-    dz=100.0,                      # Depth spacing
-    batch_size=16,                 # Increase batch size
-    epochs=500,                    # Increase training epochs
-    lr=1e-3,                       # Adjust learning rate
-    w_physics=0.5,                 # Increase physics constraint weight
-)
-```
-
-### Generate Test Models
-
-The project includes a VTI model generation tool for creating synthetic geological models:
+From the repository root:
 
 ```bash
-python examples/generate_vti_models.py
+python "source code/train_code.py" --epochs 400 --batch_size 8 --lr 5e-4
 ```
 
-Supported model types:
-- **Complex Terrain**: Complex terrain model
-- **Center Prism**: Central prism model
-- **Dual Prism**: Dual prism model (positive-negative density contrast)
+To run only the gradient-flow check for the physics loss:
 
-## Example Results
-
-### Example One: Synthetic Model Inversion
-
-<img src="examples/example one/synthetic model.png" width="400">
-<img src="examples/example one/predicted model.png" width="400">
-
-### Example Two: Complex Geological Structure
-
-<img src="examples/example two/synthetic model.png" width="400">
-<img src="examples/example two/predicted model.png" width="400">
-
-### Example Three: Complex Terrain Model
-
-<img src="examples/example three/Real the Eight-Character Step Pattern.png" width="400">
-<img src="examples/example three/predicted model.png" width="400">
-
-### Real Data Application
-
-<img src="Field data example/predicted_density_model.png" width="400">
-
-## Core Features
-
-### 1. Hybrid 2D-3D Architecture
-- 2D Encoder: Efficiently extracts horizontal features
-- 3D Transformer Decoder: Captures depth dependencies
-- Channel-to-Depth Lifting: Novel feature dimension transformation mechanism
-
-### 2. Physics Constraints
-- Integrated differentiable gravity forward operator
-- Physics consistency loss function
-- Ensures inversion results satisfy gravity field equations
-
-### 3. Depth Sensitivity Handling
-- Depth weighting mechanism
-- Focus loss function
-- Improved deep anomaly identification capability
-
-### 4. Edge Enhancement
-- Boundary detection module
-- Edge enhancement loss
-- Improves boundary clarity of anomalous bodies
-
-### 5. Data Augmentation
-- Elastic deformation augmentation
-- Multiple geometric transformations
-- Improves model generalization capability
-
-## Technical Details
-
-### Gravity Forward Operator
-
-Implements differentiable gravity forward computation using frequency domain methods:
-
-```python
-class DifferentiableForward(nn.Module):
-    """Differentiable gravity forward operator for physics consistency loss"""
-
-    def __init__(self, shape, dx, dz):
-        # FFT-based efficient computation
-        # Supports batch processing and automatic differentiation
+```bash
+python "source code/train_code.py" --verify-only
 ```
 
-### Transformer Encoder
+### 3. Evaluate the bundled `.vti` examples
 
-Employs multi-head self-attention mechanism:
-- Layers: 6
-- Attention Heads: 8
-- Position Encoding: Supported
-- Depth Attention: Supported
+The tracked evaluation script is [`folder_validation_test.py`](folder_validation_test.py). It loads `best_model.pth`, reads all `.vti` models under `examples/`, and writes per-case arrays, metrics, and summaries.
 
-### Loss Functions
+```bash
+python folder_validation_test.py ^
+  --checkpoint best_model.pth ^
+  --models-dir examples ^
+  --output-dir folder_validation_results ^
+  --device auto
+```
 
-Multi-task learning framework:
-- L1 Loss: Basic reconstruction loss
-- Physics Consistency Loss: Gravity field constraint
-- Depth Weighted Loss: Depth sensitivity
-- Focus Loss: Hard sample mining
-- Edge Enhancement Loss: Boundary clarity
-- Morphological Loss: Structure constraint
+On Linux or macOS:
 
-## Performance Metrics
+```bash
+python folder_validation_test.py \
+  --checkpoint best_model.pth \
+  --models-dir examples \
+  --output-dir folder_validation_results \
+  --device auto
+```
 
-### Evaluation Metrics
-- **Deep Anomaly IoU**: Anomaly body intersection over union
-- **RMSE**: Root mean square error
-- **Correlation Coefficient**: Gravity anomaly fitting degree
+Generated outputs include:
 
-### Typical Performance
-- Grid Resolution: 16 × 32 × 32
-- Inference Time: < 100ms (single sample)
-- Memory Usage: < 4GB (training)
+- `pred_density.npy`
+- `true_density.npy`
+- `obs_gravity.npy`
+- `pred_gravity.npy`
+- `metrics.json`
+- `summary.csv`
+- `summary.json`
+- `vis_highres/*.png`
 
-## FAQ
+### 4. Use your own data
 
-### Q: How to handle different grid sizes?
-A: Modify the `grid_shape` parameter in `V4Config`, the model will automatically adapt.
+The current tracked repository is strongest for:
 
-### Q: How to adjust the strength of physics constraints?
-A: Control via the `w_physics` parameter, typically ranging from 0.1-1.0.
+- training from synthetic data
+- evaluating `.vti` synthetic examples with `folder_validation_test.py`
 
-### Q: Does it support GPU acceleration?
-A: Yes, the code automatically detects CUDA availability and prioritizes GPU usage.
+The repository also contains a field-data example:
 
-### Q: How to perform inversion with my own gravity data?
-A: Prepare 2D gravity anomaly data in `.npy` format and input according to the inference stage format requirements.
+- input grid: `Field data example/Gzz.txt`
+- saved prediction artifacts: `batch_test_results/field_data/gzz/`
 
-## License
+If you want to adapt the model to your own data, keep the following conventions in mind:
 
-This project is licensed under the Apache License 2.0. See the LICENSE file for details.
+- match the configured grid size or change `grid_shape`, `dx`, and `dz`
+- normalize each gravity channel by its maximum absolute value
+- in `joint` mode, build the input stack as `[Gz, Gzz, depth_encoding]`
+- density targets are trained in normalized contrast space, typically clipped to `[-1, 1]`
 
-## Acknowledgments
+## Bundled Results
 
-Thanks to all contributors and testers for their support.
+### Synthetic example metrics
 
-## Contact
+The repository already includes saved evaluation summaries in `folder_validation_results/summary.csv`. The main synthetic cases report:
 
-For questions or suggestions, feel free to submit an Issue or Pull Request.
+| Example | Deep IoU | Density RMSE | Density Corr. | Gravity Corr. |
+|---|---:|---:|---:|---:|
+| Synthetic Model Inversion | `0.8252` | `0.0798` | `0.9661` | `0.9996` |
+| Complex Geological Structure | `0.7627` | `0.1099` | `0.9544` | `0.9994` |
+| Complex Terrain Model | `0.4635` | `0.0651` | `0.8317` | `0.9939` |
+
+`Deep IoU` is computed in the code on deeper layers only (`depth_threshold = 8`) with `|density| > 0.3`.
+
+### Field-data example
+
+Saved field-data outputs in `batch_test_results/summary.csv` report the following `Gzz` fit for the included example:
+
+- `gzz_rmse = 9.0842`
+- `gzz_mae = 6.2498`
+- `gzz_corr = 0.8339`
+
+The manuscript draft associates the field-data benchmark with the Vinton salt dome example.
+
+## Practical Notes
+
+- The current tracked scripts cover training and folder-based validation of `.vti` examples.
+- Pre-generated example models and result images are already included, so you can inspect outputs without rerunning training.
+- The repository contains more saved result artifacts than executable helper scripts; this README intentionally documents the files that are currently present and usable.
+
+## Citation
+
+If you use this repository in academic work, please cite the associated manuscript draft:
+
+```text
+Wenjin Chen, Shengwang Yu, Zhengfeng Jin, Lei Yi, and Xiao Gong,
+"A Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion".
+```
+
+If you need a formal bibliography entry later, update this section once the paper has a journal reference or DOI.
