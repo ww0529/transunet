@@ -1,59 +1,21 @@
 # Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion
 
-## Network Architecture
-
-<p align="center">
-  <img src="Network%20architecture.jpg" width="88%" alt="Network architecture of the proposed hybrid 2D-3D Transformer.">
-</p>
-<p align="center"><em>Schematic of the Hybrid 2D-3D Transformer proposed for 3D density gravity inversion.</em></p>
-
-The proposed network follows the paper-centered hybrid 2D-3D design. Surface observations are first encoded in 2D, then lifted into a coarse 3D seed volume through the Channel-to-Depth Lifting module. A 3D Transformer bottleneck models global volumetric context, and cross-dimensional attention injects high-resolution 2D cues back into the 3D decoding pathway. By default, the input combines `Gz`, `Gzz`, and normalized depth encoding so that gravity anomaly, gravity-gradient response, and depth prior are all used jointly.
-
-## Repository Structure
-
-```text
-.
-|-- source code/
-|   |-- train_code.py
-|   |-- config.py
-|   `-- data_preparation.py
-|-- examples/
-|   |-- example one/
-|   |-- example two/
-|   `-- example three/
-|-- Field data example/
-|   |-- Gzz.txt
-|   `-- Field data example/
-|       |-- 2D slice/
-|       |-- 3D slice/
-|       |-- 3D view of the predicted density model/
-|       `-- gravity/
-|-- folder_validation_results/
-|-- best_model.pth
-|-- folder_validation_test.py
-|-- Network architecture.jpg
-|-- README.md
-`-- README_zh.md
-```
-
-The `source code/` directory contains the core implementation of the manuscript method, `examples/` and `Field data example/` contain synthetic and field-style demonstrations, and `folder_validation_test.py` provides the scripted validation workflow used to generate the reviewer-facing results.
-
 ## Description
 
-This repository is the source-code release accompanying the manuscript `A Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion(2).docx`. The method is designed for reconstructing three-dimensional density-contrast models from gravity (`Gz`) or vertical gravity-gradient (`Gzz`) observations, and the code in this repository follows the manuscript workflow as closely as possible.
+This repository is the source-code release corresponding to the manuscript `A Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion(2).docx`. The method is designed for reconstructing three-dimensional density-contrast models from gravity anomaly (`Gz`) or vertical gravity-gradient (`Gzz`) observations.
 
-The framework is centered on the paper methodology. A three-channel surface-to-volume input tensor is constructed from observed gravity, observed gravity gradient, and normalized depth encoding, producing an input of size `[B, 3, D, H, W]` with the default grid `(D, H, W) = (16, 32, 32)`. A 2D encoder first extracts high-level response features from the surface observations. These 2D features are then reorganized by the Channel-to-Depth Lifting module into a coarse 3D seed volume, refined by a 3D Transformer bottleneck, and fused with high-resolution 2D cues through cross-dimensional attention during 3D decoding.
+The proposed framework is centered on the method presented in the manuscript. The model first constructs a three-channel surface-to-volume input tensor from observed gravity, observed gravity gradient, and normalized depth encoding. The default input size is `[B, 3, D, H, W]`, where the default grid size is `(D, H, W) = (16, 32, 32)`. Then, a 2D encoder extracts high-level response features from the surface observations, and the Channel-to-Depth Lifting module reorganizes these 2D features into a coarse 3D seed volume. A 3D Transformer bottleneck further models the volumetric representation, and cross-dimensional attention introduces high-resolution 2D details during the 3D decoding process.
 
-The training objective is built around a composite loss including physics consistency, depth weighting, anomaly focusing, gradient-difference regularization, and edge enhancement. In the released implementation, these paper-centered terms remain the training core, while auxiliary regularizers are also included to stabilize optimization and sharpen reconstructed boundaries. The overall goal is to improve depth sensitivity, anomaly focusing, structural smoothness, and boundary delineation in both synthetic and field-style demonstrations.
+The training objective is a composite loss consisting of physics-consistency, depth-weighted, focal, gradient-difference, and edge-enhancement terms. The code also includes several auxiliary regularizers to improve optimization stability and sharpen reconstructed boundaries. The overall goal is to improve deep sensitivity, anomaly focusing, structural smoothness, and boundary delineation, so that the geometry of subsurface anomalous bodies can be recovered more effectively.
 
 This repository currently includes:
 
-- the main training and model-definition files in [`source code/`](source%20code/)
-- a pretrained checkpoint `best_model.pth`
-- three bundled synthetic `.vti` examples under `examples/`
-- the reviewer-oriented validation script [`folder_validation_test.py`](folder_validation_test.py)
-- the field-style benchmark grid [`Field data example/Gzz.txt`](Field%20data%20example/Gzz.txt)
-- exported result figures in `examples/`, `Field data example/`, and `folder_validation_results/`
+- the main training and model-definition code in [`source code/`](source%20code/)
+- the best model checkpoint `best_model.pth` obtained from a 400-epoch training run
+- three synthetic `.vti` examples and their result figures in `examples/`
+- the validation script [`folder_validation_test.py`](folder_validation_test.py) for testing trained results
+- the real data file `Field data example/Gzz.txt` and the corresponding inversion figures
+- evaluation results stored in `folder_validation_results/`
 
 ## Installation
 
@@ -67,13 +29,13 @@ This repository currently includes:
 - matplotlib
 - vtk
 
-The first four packages are required for training and scripted validation. `vtk` is required for reading the bundled `.vti` models used in repository validation.
+The first four packages are used for training and scripted validation. `vtk` is required for reading the bundled `.vti` models in the repository.
 
 ## Usage
 
-The implementation is organized around the manuscript architecture in [`source code/train_code.py`](source%20code/train_code.py), the experiment configuration in [`source code/config.py`](source%20code/config.py), and the synthetic data generator in [`source code/data_preparation.py`](source%20code/data_preparation.py).
+The implementation is built around the network architecture described in the manuscript. The core files include the model and training workflow in [`source code/train_code.py`](source%20code/train_code.py), the configuration in [`source code/config.py`](source%20code/config.py), and the synthetic data generator in [`source code/data_preparation.py`](source%20code/data_preparation.py).
 
-A representative set of default parameters from the current implementation is:
+A representative set of default parameters in the current implementation is shown below:
 
 ```python
 config = V4Config(
@@ -93,7 +55,7 @@ config = V4Config(
 )
 ```
 
-The manuscript-centered composite loss can be summarized as:
+The composite loss can be summarized as:
 
 ```text
 L = lambda_phys * L_phys
@@ -103,7 +65,7 @@ L = lambda_phys * L_phys
   + lambda_edge * L_edge
 ```
 
-In the tracked code, the corresponding default weights are:
+The corresponding default weights in the current code are:
 
 ```python
 w_depth = 1.0
@@ -118,7 +80,7 @@ depth_beta = 2.0
 focus_beta = 10.0
 ```
 
-To train the network from the repository root, update `save_dir` in [`source code/config.py`](source%20code/config.py) and run:
+To train the network from the repository root, first modify `save_dir` in [`source code/config.py`](source%20code/config.py), and then run:
 
 ```bash
 python "source code/train_code.py" --epochs 400 --batch_size 8 --lr 5e-4
@@ -130,11 +92,11 @@ The code also provides a physics-gradient verification mode:
 python "source code/train_code.py" --verify-only
 ```
 
-The paper and the released code focus on three reviewer-facing synthetic demonstrations: a simple compact anomaly inversion, a more complex positive-negative geological configuration, and a staircase-style structurally sharper case. The corresponding figures are already bundled in the repository and can be inspected directly without re-running training.
+Both the manuscript and the code focus on three typical examples: a simple single-prism inversion case, a more complex positive-negative anomaly geological configuration, and a staircase-style terrain case with sharper structural boundaries. The corresponding figures are already bundled in the repository and can be inspected directly without retraining.
 
-## Run Test Code
+## Run Test Codes
 
-For scripted validation of the bundled `.vti` examples, use [`folder_validation_test.py`](folder_validation_test.py). This script loads `best_model.pth`, forward-models the network inputs, performs inference on all `.vti` models under `examples/`, and writes `metrics.json`, `summary.csv`, `summary.json`, NumPy arrays, and high-resolution figures to `folder_validation_results/`.
+To perform scripted validation on the bundled `.vti` examples, use [`folder_validation_test.py`](folder_validation_test.py). This script loads `best_model.pth`, performs forward modelling to construct the required network input, runs inference on all `.vti` models under `examples/`, and writes `metrics.json`, `summary.csv`, `summary.json`, NumPy arrays, and high-resolution figures to `folder_validation_results/`.
 
 ```bash
 python folder_validation_test.py \
@@ -144,20 +106,18 @@ python folder_validation_test.py \
   --device auto
 ```
 
-The current repository snapshot is centered on scripted validation and exported review figures. Field-style demonstration images are already included in the repository and can be inspected directly.
-
-The following high-resolution validation figures are produced by the scripted validation pipeline and are included here for convenience.
+The following figures are the high-resolution validation snapshots produced by the scripted validation workflow. These images are already included in the repository for direct inspection.
 
 <p align="center">
-  <img src="folder_validation_results/vis_highres/epoch_0000_highres.png" width="32%" alt="High-resolution validation snapshot.">
-  <img src="folder_validation_results/vis_highres/epoch_0001_highres.png" width="32%" alt="High-resolution validation snapshot.">
-  <img src="folder_validation_results/vis_highres/epoch_0002_highres.png" width="32%" alt="High-resolution validation snapshot.">
+  <img src="folder_validation_results/vis_highres/epoch_0000_highres.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
+  <img src="folder_validation_results/vis_highres/epoch_0001_highres.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
+  <img src="folder_validation_results/vis_highres/epoch_0002_highres.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
 </p>
-<p align="center"><em>High-resolution validation snapshots exported by the validation workflow.</em></p>
+<p align="center"><em>High-resolution validation figures exported by HighResVisualizer.</em></p>
 
 ### Synthetic Model Inversion
 
-This example corresponds to the simple synthetic benchmark described in the manuscript, where the network is expected to reconstruct a compact anomaly with correct location, extent, and boundary shape.
+This example corresponds to the simple synthetic benchmark in the manuscript. The goal is for the network to reconstruct a compact anomalous body whose location, extent, and boundaries are as accurate as possible.
 
 <p align="center">
   <img src="examples/example%20one/Synthetic%20Model%20Inversion/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
@@ -213,7 +173,7 @@ This example corresponds to the simple synthetic benchmark described in the manu
 
 ### Complex Geological Structure
 
-This example corresponds to the manuscript case with a more complex positive-negative anomaly configuration, where correct polarity recovery and limited cross-talk are especially important.
+This example corresponds to the more complex positive-negative anomaly combination scenario in the manuscript. The focus is on the model's ability to recover anomaly polarity and suppress cross-talk between different anomalous bodies.
 
 <p align="center">
   <img src="examples/example%20two/Complex%20Geological%20Structure/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
@@ -269,7 +229,7 @@ This example corresponds to the manuscript case with a more complex positive-neg
 
 ### Complex Terrain Model
 
-This example corresponds to the staircase-style, more structurally intricate synthetic test in the manuscript, used to assess recovery of sharp offsets, layered boundaries, and more realistic piecewise-constant geometry.
+This example corresponds to the staircase-style terrain synthetic test with higher structural complexity in the manuscript. It is used to evaluate the model's ability to recover sharp faults, layered boundaries, and geological geometries that are closer to piecewise-constant structures.
 
 <p align="center">
   <img src="examples/example%20three/Complex%20Terrain%20Model/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
@@ -325,58 +285,36 @@ This example corresponds to the staircase-style, more structurally intricate syn
 
 ### Field Data Example
 
-This section shows the field-style inversion figures included in `Field data example`. In contrast to the synthetic examples above, these figures illustrate the predicted density volume, slice views, and the agreement between observed and forward-modelled `Gzz` responses for the bundled field-style benchmark.
+This section presents the inversion figures of the real data included in `Field data example`. Unlike the synthetic examples above, this part is mainly used to show the predicted density volume, slice views, and the fit between observed and forward-modelled responses under the real `Gzz` input.
 
 <p align="center">
   <img src="Field%20data%20example/Field%20data%20example/3D%20view%20of%20the%20predicted%20density%20model/isosurface_pred.png" width="49%" alt="Predicted density isosurface.">
   <img src="Field%20data%20example/Field%20data%20example/3D%20view%20of%20the%20predicted%20density%20model/voxel_pred.png" width="49%" alt="Predicted density voxel model.">
 </p>
-<p align="center"><em>Predicted density isosurface and voxel view.</em></p>
+<p align="center"><em>Isosurface and voxel views of the predicted density model.</em></p>
 
 <p align="center">
   <img src="Field%20data%20example/Field%20data%20example/2D%20slice/x_slice.png" width="32%" alt="Predicted orthogonal 2D slices.">
   <img src="Field%20data%20example/Field%20data%20example/2D%20slice/y_slice.png" width="32%" alt="Predicted orthogonal 2D slices.">
   <img src="Field%20data%20example/Field%20data%20example/2D%20slice/z_slice.png" width="32%" alt="Predicted orthogonal 2D slices.">
 </p>
-<p align="center"><em>Predicted 2D slices along x, y, and z.</em></p>
+<p align="center"><em>2D slices of the predicted density model along the x, y, and z directions.</em></p>
 
 <p align="center">
   <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_x_slice.png" width="32%" alt="Predicted 3D slice renderings.">
   <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_y_slice.png" width="32%" alt="Predicted 3D slice renderings.">
   <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_z_slice.png" width="32%" alt="Predicted 3D slice renderings.">
 </p>
-<p align="center"><em>Predicted 3D slice renderings along x, y, and z.</em></p>
+<p align="center"><em>3D slice renderings of the predicted density model along the x, y, and z directions.</em></p>
 
 <p align="center">
   <img src="Field%20data%20example/Field%20data%20example/gravity/observed_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
   <img src="Field%20data%20example/Field%20data%20example/gravity/forward_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
 </p>
-<p align="center"><em>Observed and forward-modelled Gzz maps.</em></p>
+<p align="center"><em>Comparison between observed Gzz and the Gzz forward-modelled from the predicted density model.</em></p>
 
 <p align="center">
   <img src="Field%20data%20example/Field%20data%20example/gravity/residual.png" width="49%" alt="Residual map and residual histogram.">
   <img src="Field%20data%20example/Field%20data%20example/gravity/histogram.png" width="49%" alt="Residual map and residual histogram.">
 </p>
-<p align="center"><em>Residual distribution and residual histogram for the field-style Gzz fit.</em></p>
-
-## Related Publications
-
-If you use this code in academic work, please primarily cite the accompanying manuscript:
-
-Chen, W., Yu, S., Jin, Z., Yi, L., and Gong, X., `A Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion`.
-
-The manuscript is also positioned in the context of classical and modern gravity-inversion studies, including:
-
-Li, Y., and Oldenburg, D. W., 1998, 3-D inversion of gravity data: Geophysics, 63(1), 109-119.
-
-Zhdanov, M. S., Robert, E., and Souvik, M., 2004, Three-dimensional regularized focusing inversion of gravity gradient tensor component data: Geophysics, 69(4), 925-937.
-
-Chen, W., Tenzer, R., Tan, X., and Zhao, S., 2024, An Adaptive Conjugate Gradient Least-Squares Regularization (ACGLSR) Method for 3D Gravity Density Inversion: Pure and Applied Geophysics, 181(1), 203-218.
-
-## Acknowledgements
-
-According to the manuscript draft, this work was supported by the National Natural Science Foundation of China, the Strategic Priority Research Program of the Chinese Academy of Sciences, Jiangxi province key-laboratory opening funding, and the Jiangxi Province Key Research and Development Program.
-
-## License
-
-This repository snapshot is currently provided as the source-code package for academic review of the accompanying manuscript. Please contact the authors for reuse and redistribution details until a formal standalone license file is added to the repository.
+<p align="center"><em>Residual distribution and residual histogram of the Gzz fit.</em></p>
