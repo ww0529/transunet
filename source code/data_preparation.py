@@ -9,7 +9,7 @@ from config import V4Config
 
 
 class GeoModelGenerator:
-    """程序化地质模型生成器"""
+    """Procedural geological model generator."""
 
     def __init__(self, shape):
         self.nz, self.ny, self.nx = shape
@@ -22,7 +22,7 @@ class GeoModelGenerator:
     def generate_voronoi(self, num_cells=12):
         seeds = np.random.rand(num_cells, 3) * np.array([self.nz, self.ny, self.nx])
         densities = np.random.uniform(0.0, 1.0, num_cells)
-        # 50% 概率为负密度
+        # 50% chance of negative density
         densities = densities * (np.random.rand(num_cells) > 0.5).astype(float) * 2 - (np.random.rand(num_cells) > 0.5).astype(float)
         densities[np.random.rand(num_cells) > 0.2] = 0.0
 
@@ -42,7 +42,7 @@ class GeoModelGenerator:
             z0, z1 = sorted(np.random.randint(2, self.nz - 2, 2))
             y0, y1 = sorted(np.random.randint(4, self.ny - 4, 2))
             x0, x1 = sorted(np.random.randint(4, self.nx - 4, 2))
-            # 增加负密度概率从30%到50%
+            # Increase the negative-density probability from 30% to 50%
             val = np.random.uniform(0.3, 1.0) * (1 if np.random.rand() > 0.5 else -1)
             model[z0:z1 + 1, y0:y1 + 1, x0:x1 + 1] = val
         return np.clip(model, -1, 1)
@@ -56,20 +56,20 @@ class GeoModelGenerator:
             cx = np.random.uniform(0.2, 0.8)
             r = np.random.uniform(0.1, 0.3)
             dist = np.sqrt((self.Z - cz) ** 2 + (self.Y - cy) ** 2 + (self.X - cx) ** 2)
-            val = np.random.uniform(0.5, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50%负密度
+            val = np.random.uniform(0.5, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50% chance of negative density
             model[dist < r] = val
         return np.clip(model, -1, 1)
 
     def generate_trapezoid(self):
-        """生成梯形体 - 模拟锐利边缘的地质体"""
+        """Generate a trapezoidal body to simulate sharp-edged geological targets."""
         model = np.zeros(self.shape)
 
-        # 随机参数
+        # Random parameters
         z_start = np.random.randint(2, 6)
         z_end = np.random.randint(z_start + 4, self.nz - 2)
         base_size = np.random.randint(4, 10)
-        taper_rate = np.random.uniform(0.2, 0.5)  # 梯形擬合率
-        density = np.random.uniform(0.6, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50%负密度
+        taper_rate = np.random.uniform(0.2, 0.5)  # Trapezoid taper ratio
+        density = np.random.uniform(0.6, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50% chance of negative density
 
         center_y, center_x = self.ny // 2 + np.random.randint(-4, 5), self.nx // 2 + np.random.randint(-4, 5)
 
@@ -87,13 +87,13 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_staircase(self):
-        """阶梯体生成器 - 模拟逐层递进的地质结构"""
+        """Generate staircase-shaped bodies to simulate stepwise geological structures."""
         model = np.zeros(self.shape)
 
-        # 随机参数
+        # Random parameters
         num_steps = np.random.randint(4, 8)
         direction = np.random.choice(['x', 'y', 'diagonal'])
-        density = np.random.uniform(0.6, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50%负密度
+        density = np.random.uniform(0.6, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50% chance of negative density
         step_size = 2
 
         for i in range(num_steps):
@@ -120,18 +120,18 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_nested(self):
-        """镶嵌体生成器 - 盒中盒结构，训练边界识别"""
+        """Generate box-in-box structures for boundary learning."""
         model = np.zeros(self.shape)
 
-        # 外层盒子
+        # Outer box
         outer_density = np.random.uniform(0.3, 0.6)
         outer_z = (3, self.nz - 3)
         outer_y = (6, self.ny - 6)
         outer_x = (6, self.nx - 6)
         model[outer_z[0]:outer_z[1], outer_y[0]:outer_y[1], outer_x[0]:outer_x[1]] = outer_density
 
-        # 内层盒子 (密度不同)
-        inner_density = np.random.uniform(0.7, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50%负密度
+        # Inner box with a different density
+        inner_density = np.random.uniform(0.7, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50% chance of negative density
         margin = np.random.randint(2, 5)
         inner_z = (outer_z[0] + margin, outer_z[1] - margin)
         inner_y = (outer_y[0] + margin, outer_y[1] - margin)
@@ -143,17 +143,17 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_multiscale(self):
-        """多尺度块生成器 - 大中小块组合"""
+        """Generate multi-scale blocky structures."""
         model = np.zeros(self.shape)
 
-        # 大块 (1个) - 50% 概率为负
+        # Large block (one body), with a 50% chance of negative density
         z0, z1 = 4, 12
         y0, y1 = 8, 24
         x0, x1 = 8, 24
         large_density = np.random.uniform(0.3, 0.5) * (1 if np.random.rand() > 0.5 else -1)
         model[z0:z1, y0:y1, x0:x1] = large_density
 
-        # 中块 (2-3个) - 50% 概率为负
+        # Medium blocks (2-3 bodies), with a 50% chance of negative density
         for _ in range(np.random.randint(2, 4)):
             size = np.random.randint(3, 6)
             cz = np.random.randint(2, self.nz - size)
@@ -162,89 +162,89 @@ class GeoModelGenerator:
             val = np.random.uniform(0.5, 0.8) * (1 if np.random.rand() > 0.5 else -1)
             model[cz:cz + size, cy:cy + size, cx:cx + size] = val
 
-        # 小块 (3-5个) - 高密度，锐利边缘
+        # Small blocks (3-5 bodies) with high density and sharp edges
         for _ in range(np.random.randint(3, 6)):
             size = 2
             cz = np.random.randint(2, self.nz - size)
             cy = np.random.randint(2, self.ny - size)
             cx = np.random.randint(2, self.nx - size)
-            val = np.random.uniform(0.8, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50%负密度
+            val = np.random.uniform(0.8, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50% chance of negative density
             model[cz:cz + size, cy:cy + size, cx:cx + size] = val
 
         return np.clip(model, -1, 1)
 
     def generate_fault(self):
-        """断层结构生成器 - 斜切的地质断层（向量化实现）"""
+        """Generate a tilted fault structure using a vectorized implementation."""
         model = np.zeros(self.shape)
 
-        # 断层参数
-        fault_angle = np.random.uniform(30, 60)  # 断层倾角 (度)
-        fault_offset = np.random.randint(2, 5)  # 断层位移
+        # Fault parameters
+        fault_angle = np.random.uniform(30, 60)  # Fault dip angle in degrees
+        fault_offset = np.random.randint(2, 5)  # Fault displacement
         density_left = np.random.uniform(0.5, 0.8) * (1 if np.random.rand() > 0.5 else -1)
         density_right = np.random.uniform(0.3, 0.6) * (1 if np.random.rand() > 0.5 else -1)
 
-        # 创建斜切面（向量化）
+        # Create the inclined fault plane in a vectorized way
         tan_angle = np.tan(np.radians(fault_angle))
 
-        # 创建网格
+        # Create the computational grid
         z_grid, y_grid, x_grid = np.meshgrid(
             np.arange(self.nz), np.arange(self.ny), np.arange(self.nx), indexing='ij'
         )
 
-        # 计算断层面位置（向量化）
+        # Compute the fault-plane position in a vectorized form
         fault_x = self.nx / 2 + (z_grid - self.nz / 2) * tan_angle
 
-        # 左侧（断层面左边）
+        # Left side of the fault plane
         left_mask = (x_grid < fault_x - fault_offset) & (z_grid > 3) & (z_grid < self.nz - 2)
         model[left_mask] = density_left
 
-        # 右侧（断层面右边，带位移）
+        # Right side of the fault plane with displacement
         right_mask = (x_grid >= fault_x + fault_offset) & (z_grid > 3 + fault_offset) & (z_grid < self.nz - 2)
         model[right_mask] = density_right
 
         return np.clip(model, -1, 1)
 
     def generate_perlin_terrain(self):
-        """柏林噪声地形生成器 - 模拟自然地质变化"""
+        """Generate Perlin-like terrain to mimic natural geological variability."""
         from scipy.ndimage import gaussian_filter
 
-        # 多尺度噪声叠加
+        # Multi-scale noise synthesis
         model = np.zeros(self.shape)
 
-        # 大尺度变化
+        # Large-scale variation
         noise_large = np.random.randn(self.nz // 4, self.ny // 4, self.nx // 4)
         noise_large = gaussian_filter(noise_large, sigma=1)
         from scipy.ndimage import zoom
         noise_large = zoom(noise_large, (4, 4, 4), order=1)[:self.nz, :self.ny, :self.nx]
 
-        # 中尺度变化
+        # Medium-scale variation
         noise_mid = np.random.randn(self.nz // 2, self.ny // 2, self.nx // 2)
         noise_mid = gaussian_filter(noise_mid, sigma=0.5)
         noise_mid = zoom(noise_mid, (2, 2, 2), order=1)[:self.nz, :self.ny, :self.nx]
 
-        # 小尺度细节
+        # Small-scale details
         noise_small = np.random.randn(self.nz, self.ny, self.nx)
         noise_small = gaussian_filter(noise_small, sigma=0.3)
 
-        # 组合
+        # Combine the scales
         model = 0.5 * noise_large + 0.3 * noise_mid + 0.2 * noise_small
 
-        # 阈值化：保留高密度和低密度区域（支持正负密度）
+        # Threshold the field while preserving both positive and negative density regions
         threshold_high = np.percentile(model, 70)
         threshold_low = np.percentile(model, 30)
 
-        # 高密度区域保留为正
+        # Keep high-density regions positive
         model[model < threshold_high] = 0
         model[model >= threshold_high] = (model[model >= threshold_high] - threshold_high) / (model.max() - threshold_high + 1e-6)
 
-        # 低密度区域转为负
+        # Convert low-density regions to negative values
         low_mask = model < threshold_low
         model[low_mask] = -(threshold_low - model[low_mask]) / (threshold_low - model.min() + 1e-6)
 
         return np.clip(model, -1, 1)
 
     def generate_fractal(self):
-        """分形结构生成器 - 模拟自相似地质结构"""
+        """Generate fractal structures to mimic self-similar geological patterns."""
         model = np.zeros(self.shape)
 
         def add_box(z0, z1, y0, y1, x0, x1, density, depth=0, max_depth=3):
@@ -253,12 +253,12 @@ class GeoModelGenerator:
             if z1 <= z0 or y1 <= y0 or x1 <= x0:
                 return
 
-            # 填充当前盒子
+            # Fill the current box
             model[z0:z1, y0:y1, x0:x1] = density
 
-            # 随机决定是否递归
+            # Randomly decide whether to recurse
             if np.random.rand() < 0.7:
-                # 在角落添加子盒子
+                # Add sub-boxes near the corners
                 sub_size_z = max(1, (z1 - z0) // 3)
                 sub_size_y = max(1, (y1 - y0) // 3)
                 sub_size_x = max(1, (x1 - x0) // 3)
@@ -281,22 +281,22 @@ class GeoModelGenerator:
                                 depth + 1, max_depth
                         )
 
-        # 初始大盒子 - 50% 概率为负密度
+        # Initial large box, with a 50% chance of negative density
         initial_density = np.random.uniform(0.4, 0.7) * (1 if np.random.rand() > 0.5 else -1)
         add_box(2, self.nz - 2, 4, self.ny - 4, 4, self.nx - 4, initial_density)
 
         return np.clip(model, -1, 1)
 
     def generate_figure8_staircase(self):
-        """八字形阶梯生成器 - 两条交叉的阶梯结构"""
+        """Generate a figure-eight staircase structure."""
         model = np.zeros(self.shape)
 
         step_count = np.random.randint(4, 7)
         step_size = 2
-        # 50% 概率为负密度
+        # 50% chance of negative density
         density = np.random.uniform(0.7, 1.0) * (1 if np.random.rand() > 0.5 else -1)
 
-        # 第一条阶梯: 从左上到右下
+        # First staircase: from upper left to lower right
         for i in range(step_count):
             x_center = 6 + i * 3
             z_center = 3 + i * 2
@@ -308,7 +308,7 @@ class GeoModelGenerator:
 
             model[z_start:z_end, y_start:y_end, x_start:x_end] = density
 
-        # 第二条阶梯: 从右上到左下
+        # Second staircase: from upper right to lower left
         for i in range(step_count):
             x_center = self.nx - 7 - i * 3
             z_center = 3 + i * 2
@@ -323,25 +323,25 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_separated_prisms(self):
-        """分离双长方体生成器 - 训练模型识别两个独立密度体和中间空隙"""
+        """Generate two separated prisms with a gap between them."""
         model = np.zeros(self.shape)
 
-        # 随机选择分离方向
+        # Randomly choose the separation direction
         direction = np.random.choice(['x', 'y', 'z'])
 
-        # 两个长方体的密度：50%概率一正一负
+        # Prism densities: 50% chance of opposite polarity
         if np.random.rand() > 0.5:
-            # 一正一负
+            # One positive and one negative
             density1 = np.random.uniform(0.5, 1.0)
             density2 = -np.random.uniform(0.4, 0.8)
         else:
-            # 同符号
+            # Same sign
             density1 = np.random.uniform(0.5, 1.0)
             density2 = np.random.uniform(0.5, 1.0)
             if np.random.rand() > 0.5:
-                density1, density2 = -density1, -density2  # 50% 全负
+                density1, density2 = -density1, -density2  # 50% chance that both are negative
 
-        # 分离间隙大小
+        # Separation gap size
         gap = np.random.randint(2, 6)
 
         if direction == 'x':
@@ -380,34 +380,34 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_hollow_box(self):
-        """空心盒子生成器 - 训练模型识别中空结构"""
+        """Generate hollow box structures."""
         model = np.zeros(self.shape)
 
-        shell_density = np.random.uniform(0.6, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50%负密度
-        # 壳厚度
+        shell_density = np.random.uniform(0.6, 1.0) * (1 if np.random.rand() > 0.5 else -1)  # 50% chance of negative density
+        # Shell thickness
         thickness = np.random.randint(2, 4)
 
-        # 外壳边界
+        # Outer shell bounds
         z_out = (3, self.nz - 3)
         y_out = (5, self.ny - 5)
         x_out = (5, self.nx - 5)
 
-        # 内部边界（空心部分）
+        # Inner hollow bounds
         z_in = (z_out[0] + thickness, z_out[1] - thickness)
         y_in = (y_out[0] + thickness, y_out[1] - thickness)
         x_in = (x_out[0] + thickness, x_out[1] - thickness)
 
-        # 先填充整个外壳
+        # Fill the entire outer shell first
         model[z_out[0]:z_out[1], y_out[0]:y_out[1], x_out[0]:x_out[1]] = shell_density
 
-        # 再将内部掏空
+        # Then carve out the inner cavity
         if z_in[1] > z_in[0] and y_in[1] > y_in[0] and x_in[1] > x_in[0]:
             model[z_in[0]:z_in[1], y_in[0]:y_in[1], x_in[0]:x_in[1]] = 0.0
 
         return np.clip(model, -1, 1)
 
     def generate_layered_density(self):
-        """层状密度生成器 - 不同密度的水平层，夹杂空隙"""
+        """Generate layered density models with possible void layers."""
         model = np.zeros(self.shape)
 
         num_layers = np.random.randint(3, 6)
@@ -417,32 +417,32 @@ class GeoModelGenerator:
             z_start = i * layer_height + 1
             z_end = min((i + 1) * layer_height - 1, self.nz - 1)
 
-            # 随机决定是否为空隙层
-            if np.random.rand() > 0.3:  # 70% 概率有密度
-                # 50% 概率为负密度
+            # Randomly decide whether this is a void layer
+            if np.random.rand() > 0.3:  # 70% chance that the layer contains density
+                # 50% chance of negative density
                 density = np.random.uniform(0.4, 1.0) * (1 if np.random.rand() > 0.5 else -1)
                 y_start, y_end = 5, self.ny - 5
                 x_start, x_end = 5, self.nx - 5
                 model[z_start:z_end, y_start:y_end, x_start:x_end] = density
-            # 否则保持为 0（空隙）
+            # Otherwise keep the layer at zero as a void
 
         return np.clip(model, -1, 1)
 
     def generate_scattered_anomalies(self):
-        """分散多异常体生成器 - 模拟真实地质场景中多个分散的正负密度异常"""
+        """Generate multiple scattered positive and negative anomaly bodies."""
         model = np.zeros(self.shape)
 
-        # 生成 3-6 个分散的异常体
+        # Generate 3-6 scattered anomaly bodies
         n_bodies = np.random.randint(3, 7)
 
-        # 确保正负密度都有
+        # Ensure that both positive and negative densities appear
         n_positive = np.random.randint(1, n_bodies)
         n_negative = n_bodies - n_positive
 
-        centers = []  # 记录中心避免重叠
+        centers = []  # Record centers to reduce overlap
 
         for i in range(n_bodies):
-            # 随机大小（小中大）
+            # Random size category: small, medium, or large
             size_type = np.random.choice(['small', 'medium', 'large'], p=[0.4, 0.4, 0.2])
             if size_type == 'small':
                 sz, sy, sx = np.random.randint(2, 4), np.random.randint(3, 5), np.random.randint(3, 5)
@@ -451,13 +451,13 @@ class GeoModelGenerator:
             else:
                 sz, sy, sx = np.random.randint(4, 7), np.random.randint(6, 10), np.random.randint(6, 10)
 
-            # 随机位置（避免边缘）
-            for _ in range(20):  # 最多尝试20次找不重叠位置
+            # Random position while avoiding boundaries
+            for _ in range(20):  # Try up to 20 times to find a non-overlapping location
                 cz = np.random.randint(2, self.nz - sz - 1)
                 cy = np.random.randint(4, self.ny - sy - 3)
                 cx = np.random.randint(4, self.nx - sx - 3)
 
-                # 检查是否与已有中心距离足够远
+                # Check whether the new center is sufficiently far from existing ones
                 overlap = False
                 for (oz, oy, ox) in centers:
                     if abs(cz - oz) < 4 and abs(cy - oy) < 6 and abs(cx - ox) < 6:
@@ -468,13 +468,13 @@ class GeoModelGenerator:
 
             centers.append((cz, cy, cx))
 
-            # 正负密度
+            # Assign positive or negative density
             if i < n_positive:
                 density = np.random.uniform(0.5, 1.0)
             else:
                 density = -np.random.uniform(0.4, 0.9)
 
-            # 填充
+            # Fill the anomaly body
             z0, z1 = cz, min(cz + sz, self.nz)
             y0, y1 = cy, min(cy + sy, self.ny)
             x0, x1 = cx, min(cx + sx, self.nx)
@@ -483,10 +483,10 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def generate_realistic_anomaly(self):
-        """真实异常体生成器 - 模拟类似Gzz.txt的多峰复杂异常"""
+        """Generate realistic multi-peak anomalies similar to Gzz.txt."""
         model = np.zeros(self.shape)
 
-        # 主异常体（较大，正密度）
+        # Main anomaly body: larger and positive
         main_cz = np.random.randint(2, 5)
         main_cy = np.random.randint(10, 22)
         main_cx = np.random.randint(10, 22)
@@ -500,7 +500,7 @@ class GeoModelGenerator:
         x0, x1 = max(0, main_cx - main_sx // 2), min(self.nx, main_cx + main_sx // 2)
         model[z0:z1, y0:y1, x0:x1] = main_density
 
-        # 次级异常体（1-3个，混合正负）
+        # Secondary anomaly bodies (1-3) with mixed polarity
         for _ in range(np.random.randint(1, 4)):
             sec_cz = np.random.randint(3, 10)
             sec_cy = np.random.randint(5, self.ny - 5)
@@ -515,7 +515,7 @@ class GeoModelGenerator:
             x0, x1 = max(0, sec_cx - sec_sx // 2), min(self.nx, sec_cx + sec_sx // 2)
             model[z0:z1, y0:y1, x0:x1] = sec_density
 
-        # 深层弱异常（模拟背景变化）
+        # Deep weak anomaly to mimic background variation
         if np.random.rand() > 0.5:
             deep_z = np.random.randint(8, 12)
             model[deep_z:, :, :] += np.random.uniform(-0.2, 0.2)
@@ -523,7 +523,7 @@ class GeoModelGenerator:
         return np.clip(model, -1, 1)
 
     def mixup_generator(self):
-        """混合生成器 - 包含真实场景模拟以改善Gzz反演"""
+        """Mixed generator including more realistic anomaly scenarios for Gzz inversion."""
         generators = {
             'voronoi': (self.generate_voronoi, 0.03),
             'prism': (self.generate_prism, 0.16),
@@ -539,8 +539,8 @@ class GeoModelGenerator:
             'separated': (self.generate_separated_prisms, 0.14),
             'hollow': (self.generate_hollow_box, 0.05),
             'layered': (self.generate_layered_density, 0.03),
-            'scattered': (self.generate_scattered_anomalies, 0.12),  # 新增: 分散多异常体
-            'realistic': (self.generate_realistic_anomaly, 0.10),  # 新增: 真实异常模拟
+            'scattered': (self.generate_scattered_anomalies, 0.12),  # Added: scattered multi-anomaly bodies
+            'realistic': (self.generate_realistic_anomaly, 0.10),  # Added: realistic anomaly simulation
         }
 
         names = list(generators.keys())
@@ -550,7 +550,7 @@ class GeoModelGenerator:
         return generators[choice][0]()
 
     def simple_generator(self):
-        """简单生成器 - 仅使用基础形状，用于课程学习初期"""
+        """Simple generator using only basic shapes for early curriculum learning."""
         simple_generators = {
             'prism': (self.generate_prism, 0.35),
             'sphere': (self.generate_sphere, 0.25),
@@ -566,7 +566,7 @@ class GeoModelGenerator:
 
 
 class FastGravityForward:
-    """NumPy 版本的快速正演（用于数据生成）"""
+    """Fast NumPy-based forward modeling for synthetic data generation."""
 
     def __init__(self, shape: Tuple[int, int, int], dx: float, dz: float, mode: str = 'gz'):
         self.nz, self.ny, self.nx = shape
@@ -615,7 +615,7 @@ class FastGravityForward:
             field_padded = np.fft.ifft2(field_fft, axes=(1, 2)).real
             field = field_padded[:, self.pad_y:-self.pad_y, self.pad_x:-self.pad_x]
             field[0] *= 1e5  # mGal
-            field[1] *= 1e9  # Eötvös
+            field[1] *= 1e9  # Eotvos
             return field
         else:
             field_fft = np.sum(rho_fft * self._kernel_fft, axis=0)
@@ -660,7 +660,7 @@ class FastGravityForward:
 
 
 # ==========================================
-# [数据层] Advanced Dataset with Augmentation
+# [Data] Advanced Dataset with Augmentation
 # ==========================================
 
 
@@ -772,25 +772,25 @@ class V4Dataset(Dataset):
             if np.random.rand() > 0.5:
                 density = self.augmentor.add_geological_noise(density)
 
-        # 正演计算
+        # Forward modeling
         field_data = self.forward_op.forward(density)
 
-        # 添加噪声
+        # Add observation noise
         if self.mode == 'train':
             noise_level = np.random.uniform(0.01, 0.05)
             noise = np.random.normal(0, np.std(field_data) * noise_level, field_data.shape)
             field_data = field_data + noise
 
-        # 转换为 Tensor
+        # Convert to tensor
         density_tensor = torch.from_numpy(density.copy()).float().unsqueeze(0)  # [1, D, H, W]
 
-        # 构建输入
+        # Build the network input
         if self.config.data_mode == 'joint':
             gz = field_data[0]
             gzz = field_data[1]
 
-            # 动态归一化：使用最大绝对值缩放到 [-1, 1]
-            gz_max = np.abs(gz).max() + 1e-8  # 避免除零
+            # Dynamic normalization using the maximum absolute value to scale into [-1, 1]
+            gz_max = np.abs(gz).max() + 1e-8  # Avoid division by zero
             gzz_max = np.abs(gzz).max() + 1e-8
             gz_norm = gz / gz_max
             gzz_norm = gzz / gzz_max
@@ -802,11 +802,11 @@ class V4Dataset(Dataset):
             z_tensor = torch.from_numpy(z_map).float()
             input_vol = torch.stack([gz_vol, gzz_vol, z_tensor], dim=0)  # [3, D, H, W]
 
-            # 保存原始观测用于物理损失
+            # Preserve the original observation for the physics loss
             obs_gravity = torch.from_numpy(field_data[0].copy()).float().unsqueeze(0)  # [1, H, W]
         else:
             gz = field_data
-            # 动态归一化
+            # Dynamic normalization
             gz_max = np.abs(gz).max() + 1e-8
             gz_norm = gz / gz_max
 
