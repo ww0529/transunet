@@ -1,0 +1,16 @@
+{
+  "report_type": "case",
+  "case_name": "Complex Terrain Model",
+  "source": "E:\\deeplearn\\python1\\computer\\transunet\\examples\\example three\\Complex Terrain Model.vti",
+  "loss": 0.07392849773168564,
+  "deep_iou": 0.4634920656681061,
+  "relative_error": 17524.9765625,
+  "density_rmse": 0.0650981217622757,
+  "gravity_rmse": 0.26168885827064514,
+  "density_corr": 0.8316848441527765,
+  "gravity_corr": 0.9938784103130481,
+  "pred_min": -0.1810600310564041,
+  "pred_max": 1.0329375267028809,
+  "true_min": 0.0,
+  "true_max": 0.5
+}

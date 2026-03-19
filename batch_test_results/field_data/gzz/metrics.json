@@ -1,0 +1,34 @@
+{
+  "case_type": "field_gzz",
+  "case_name": "Gzz",
+  "source": "E:\\deeplearn\\python1\\computer\\transunet\\Field data example\\Gzz.txt",
+  "grid_shape_model": [
+    16,
+    32,
+    32
+  ],
+  "grid_shape_pred": [
+    16,
+    32,
+    32
+  ],
+  "data_mode": "joint",
+  "dx": 100.0,
+  "dy": 100.0,
+  "dz": 100.0,
+  "raw_gzz_corr": 0.9149502778932859,
+  "sign_flipped_from_gzz": false,
+  "sign_flipped_during_scaling": false,
+  "scale_alpha": 5.0,
+  "pred_density_norm_min": -0.7437512278556824,
+  "pred_density_norm_max": 0.3697017729282379,
+  "pred_density_physical_min": -200.0,
+  "pred_density_physical_max": 500.0,
+  "obs_gzz_min": -25.02603530883789,
+  "obs_gzz_max": 65.48606872558594,
+  "pred_gzz_min": -12.719653964343978,
+  "pred_gzz_max": 30.26034320960494,
+  "gzz_rmse": 9.084210199246561,
+  "gzz_mae": 6.249757964689216,
+  "gzz_corr": 0.8339212192451942
+}

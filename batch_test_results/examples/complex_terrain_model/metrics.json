@@ -1,0 +1,40 @@
+{
+  "case_type": "vti_example",
+  "case_name": "Complex Terrain Model",
+  "source": "E:\\deeplearn\\python1\\computer\\transunet\\examples\\example three\\Complex Terrain Model.vti",
+  "grid_shape_model": [
+    16,
+    32,
+    32
+  ],
+  "grid_shape_true": [
+    16,
+    32,
+    32
+  ],
+  "grid_shape_pred": [
+    16,
+    32,
+    32
+  ],
+  "data_mode": "joint",
+  "dx": 100.0,
+  "dy": 100.0,
+  "dz": 100.0,
+  "raw_density_corr": 0.8316848441527765,
+  "sign_flipped": false,
+  "true_density_min": 0.0,
+  "true_density_max": 0.5,
+  "pred_density_min": -0.1810600310564041,
+  "pred_density_max": 1.0329375267028809,
+  "obs_gzz_min": -43.96210479736328,
+  "obs_gzz_max": 1.5858778953552246,
+  "pred_gzz_min": -72.54049767050923,
+  "pred_gzz_max": 7.9994519635682755,
+  "density_rmse": 0.0650981217622757,
+  "density_mae": 0.02234242483973503,
+  "density_corr": 0.8316848441527765,
+  "gzz_rmse": 4.093191453339655,
+  "gzz_mae": 2.598572749147807,
+  "gzz_corr": 0.987616000925282
+}
