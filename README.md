@@ -14,13 +14,6 @@ This repository already includes:
 - saved batch-style example outputs in `batch_test_results/`
 - an included field benchmark grid: `Field data example/Gzz.txt`
 
-<p align="center">
-  <img src="batch_test_results/examples/synthetic_model_inversion/comparison.png" width="32%" alt="Bundled inversion comparison">
-  <img src="batch_test_results/examples/complex_geological_structure/comparison.png" width="32%" alt="Bundled inversion comparison">
-  <img src="batch_test_results/examples/complex_terrain_model/comparison.png" width="32%" alt="Bundled inversion comparison">
-</p>
-<p align="center"><em>Bundled synthetic comparison panels for the simple prism, complex geological structure, and complex terrain examples.</em></p>
-
 ## Repository Structure
 
 ```text
