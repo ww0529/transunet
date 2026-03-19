@@ -513,7 +513,3 @@ for 3D Density Gravity Inversion.
 ```
 
 Update this section when the manuscript receives a formal journal reference or DOI.
-
-## Acknowledgment
-
-According to the manuscript draft, this work was supported by the National Natural Science Foundation of China, the Strategic Priority Research Program of the Chinese Academy of Sciences, Jiangxi province of key laboratory opening funding, and the Jiangxi Province Key Research and Development Program.
