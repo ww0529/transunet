@@ -4,11 +4,11 @@
 <p align="center">
   <img src="Network%20architecture.jpg" width="88%" alt="Network architecture of the proposed hybrid 2D-3D Transformer.">
 </p>
-<p align="center"><em>论文所提出的 Hybrid 2D-3D Transformer for 3D density gravity inversion 网络结构示意图。</em></p>
+<p align="center"><em>Schematic of the Hybrid 2D-3D Transformer for 3D density gravity inversion proposed in the manuscript.</em></p>
 
-该网络是论文中的混合 2D-3D Transformer ，首先从表面重力响应中提取二维特征，再通过 Channel-to-Depth Lifting 模块将二维特征提升为三维初始体，随后利用 3D Transformer 建模全局空间关联，并在解码阶段结合跨维注意力逐步恢复三维密度分布。默认输入由 `Gz`、`Gzz` 和归一化深度编码共同构成，从而同时利用重力异常、重力梯度以及深度先验信息。
+This network is the hybrid 2D-3D Transformer proposed in the manuscript. It first extracts 2D features from surface gravity responses, then lifts the 2D features into an initial 3D volume through the Channel-to-Depth Lifting module. A 3D Transformer is subsequently used to model global spatial correlations, and cross-dimensional attention is incorporated during decoding to progressively recover the 3D density distribution. By default, the input is composed of `Gz`, `Gzz`, and normalized depth encoding, so that gravity anomalies, gravity gradients, and depth prior information can all be utilized simultaneously.
 
-## 目录结构
+## Repository Structure
 
 ```text
 .
@@ -33,11 +33,8 @@
 ├── test_code.py
 ├── README.md
 └── README_zh.md
-```
-
-其中，`source code/` 存放论文方法对应的核心训练与数据生成代码，`examples/` 和 `Field data example/` 存放真实数据示例，`folder_validation_test.py` 与 `test_code.py` 分别对应脚本化验证和交互式测试流程。
-
-<img src="Field%20data%20example/predicted_density_model.png" width="520">
+Here, source code/ contains the core training and data-generation code corresponding to the manuscript method, examples/ and Field data example/ contain real-data examples, and folder_validation_test.py and test_code.py correspond to the scripted validation and interactive testing workflows, respectively.
+<img src="Field%20data%20example/predicted_density_model.png" width="520"> ```
 ## Description
 
 This repository is the source-code release corresponding to the manuscript `A Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion(2).docx`. The method is designed for reconstructing three-dimensional density-contrast models from gravity anomaly (`Gz`) or vertical gravity-gradient (`Gzz`) observations.
