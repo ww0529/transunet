@@ -44,6 +44,6 @@ class V4Config:
     elastic_sigma: float = 4.0
 
     device: str = "cuda" if torch.cuda.is_available() else "cpu"
-    save_dir: str = "/home/jszxgx/ysw/deeplearn/checkpoints_v4_new"
+    save_dir: str = "checkpoints"
     num_workers: int = 4
     resume_path: Optional[str] = None
