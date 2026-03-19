@@ -1,4 +1,4 @@
-# Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion
+# A Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion
 ## Network Architecture
 
 <p align="center">
