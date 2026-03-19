@@ -1,5 +1,43 @@
 # Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion
+## Network Architecture
 
+<p align="center">
+  <img src="Network%20architecture.jpg" width="88%" alt="Network architecture of the proposed hybrid 2D-3D Transformer.">
+</p>
+<p align="center"><em>论文所提出的 Hybrid 2D-3D Transformer for 3D density gravity inversion 网络结构示意图。</em></p>
+
+该网络是论文中的混合 2D-3D Transformer ，首先从表面重力响应中提取二维特征，再通过 Channel-to-Depth Lifting 模块将二维特征提升为三维初始体，随后利用 3D Transformer 建模全局空间关联，并在解码阶段结合跨维注意力逐步恢复三维密度分布。默认输入由 `Gz`、`Gzz` 和归一化深度编码共同构成，从而同时利用重力异常、重力梯度以及深度先验信息。
+
+## 目录结构
+
+```text
+.
+├── source code/
+│   ├── train_code.py
+│   ├── config.py
+│   └── data_preparation.py
+├── examples/
+│   ├── example one/
+│   ├── example two/
+│   └── example three/
+├── Field data example/
+│   ├── Gzz.txt
+│   └── Field data example/
+│       ├── 2D slice/
+│       ├── 3D slice/
+│       ├── 3D view of the predicted density model/
+│       └── gravity/
+├── folder_validation_results/
+├── best_model.pth
+├── folder_validation_test.py
+├── test_code.py
+├── README.md
+└── README_zh.md
+```
+
+其中，`source code/` 存放论文方法对应的核心训练与数据生成代码，`examples/` 和 `Field data example/` 存放真实数据示例，`folder_validation_test.py` 与 `test_code.py` 分别对应脚本化验证和交互式测试流程。
+
+<img src="Field%20data%20example/predicted_density_model.png" width="520">
 ## Description
 
 This repository is the source-code release corresponding to the manuscript `A Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion(2).docx`. The method is designed for reconstructing three-dimensional density-contrast models from gravity anomaly (`Gz`) or vertical gravity-gradient (`Gzz`) observations.
