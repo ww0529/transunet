@@ -30,9 +30,7 @@ This network is the hybrid 2D-3D Transformer proposed in the manuscript. It firs
 ├── folder_validation_results/
 ├── best_model.pth
 ├── folder_validation_test.py
-├── test_code.py
-├── README.md
-└── README_zh.md
+└── README.md
 ```
 Here, source code/ contains the core training and data-generation code corresponding to the manuscript method, examples/ and Field data example/ contain real-data examples, and folder_validation_test.py and test_code.py correspond to the scripted validation and interactive testing workflows, respectively. ```
 ## Description
