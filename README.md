@@ -58,7 +58,7 @@ Notes:
 
 ## Requirements
 
-- Python 3.x
+- Python 3.10
 - PyTorch
 - NumPy
 - SciPy
