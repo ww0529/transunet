@@ -165,7 +165,7 @@ This section follows Section 3.3 of the manuscript. The benchmark contains a sin
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 5. 3D view of the prism model: (a) synthetic model and (b) predicted model.</em></p>
+<p align="center"><em> 3D view of the prism model: (a) synthetic model and (b) predicted model.</em></p>
 
 <table align="center">
   <tr>
@@ -189,7 +189,7 @@ This section follows Section 3.3 of the manuscript. The benchmark contains a sin
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 6. Slice of the synthetic and predicted density models along x = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+<p align="center"><em> Slice of the synthetic and predicted density models along x = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
 <table align="center">
   <tr>
@@ -213,7 +213,7 @@ This section follows Section 3.3 of the manuscript. The benchmark contains a sin
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 7. Slice of the synthetic and predicted density models along y = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+<p align="center"><em> Slice of the synthetic and predicted density models along y = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
 <table align="center">
   <tr>
@@ -237,7 +237,7 @@ This section follows Section 3.3 of the manuscript. The benchmark contains a sin
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 8. Slice of the synthetic and predicted density models along z = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+<p align="center"><em>Slice of the synthetic and predicted density models along z = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
 The gravity-gradient comparison also follows the manuscript: the forward-modelled `Gzz` field from the predicted density model closely matches the observed field, and the residuals remain small and approximately zero-centered.
 
@@ -263,7 +263,7 @@ The gravity-gradient comparison also follows the manuscript: the forward-modelle
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 9. Observed and predicted gravity gradient data. (a) Observed gravity gradient with 5% Gaussian noise added; (b) predicted gravity gradient; (c) gravity gradient difference between the observed and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
+<p align="center"><em> Observed and predicted gravity gradient data. (a) Observed gravity gradient with 5% Gaussian noise added; (b) predicted gravity gradient; (c) gravity gradient difference between the observed and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
 
 ### Synthetic example one-two prisms model
 
@@ -281,7 +281,7 @@ This section follows the two-prism experiment in the manuscript. The synthetic m
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 10. 3D view of the two prisms model: (a) synthetic model and (b) predicted model.</em></p>
+<p align="center"><em>3D view of the two prisms model: (a) synthetic model and (b) predicted model.</em></p>
 
 <table align="center">
   <tr>
@@ -305,7 +305,7 @@ This section follows the two-prism experiment in the manuscript. The synthetic m
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 11. Slice of the synthetic and predicted density models along x = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+<p align="center"><em>Slice of the synthetic and predicted density models along x = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
 <table align="center">
   <tr>
@@ -329,7 +329,7 @@ This section follows the two-prism experiment in the manuscript. The synthetic m
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 12. Slice of the synthetic and predicted density models along y = 1500 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+<p align="center"><em>Slice of the synthetic and predicted density models along y = 1500 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
 <table align="center">
   <tr>
@@ -353,7 +353,7 @@ This section follows the two-prism experiment in the manuscript. The synthetic m
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 13. Slice of the synthetic and predicted density models along z = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+<p align="center"><em>Slice of the synthetic and predicted density models along z = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
 The manuscript emphasizes that the recovered `Gzz` response reproduces both anomaly polarity and interference patterns without significant cross-talk, and the residual histogram remains centered near zero.
 
@@ -379,7 +379,7 @@ The manuscript emphasizes that the recovered `Gzz` response reproduces both anom
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 14. Observed and predicted gravity gradient data. (a) Observed gravity gradient with 5% Gaussian noise added; (b) predicted gravity gradient; (c) gravity gradient difference between the observed and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
+<p align="center"><em> Observed and predicted gravity gradient data. (a) Observed gravity gradient with 5% Gaussian noise added; (b) predicted gravity gradient; (c) gravity gradient difference between the observed and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
 
 ### Synthetic example one-two staircase models
 
@@ -397,7 +397,7 @@ This section follows the structurally more complex two-staircase case from the m
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 15. 3D view of the two staircase model: (a) synthetic model and (b) predicted model.</em></p>
+<p align="center"><em>3D view of the two staircase model: (a) synthetic model and (b) predicted model.</em></p>
 
 <table align="center">
   <tr>
@@ -421,7 +421,7 @@ This section follows the structurally more complex two-staircase case from the m
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 16. Slice of the synthetic and predicted density models along x = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+<p align="center"><em>Slice of the synthetic and predicted density models along x = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
 <table align="center">
   <tr>
@@ -445,7 +445,7 @@ This section follows the structurally more complex two-staircase case from the m
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 17. Slice of the synthetic and predicted density models along y = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+<p align="center"><em>Slice of the synthetic and predicted density models along y = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
 <table align="center">
   <tr>
@@ -469,7 +469,7 @@ This section follows the structurally more complex two-staircase case from the m
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 18. Slice of the synthetic and predicted density models along z = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+<p align="center"><em>Slice of the synthetic and predicted density models along z = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
 The manuscript notes that the predicted `Gzz` field preserves the dominant staircase anomaly pattern, while the residual map lacks coherent staircase-aligned artifacts and the histogram stays nearly symmetric around zero.
 
@@ -495,7 +495,7 @@ The manuscript notes that the predicted `Gzz` field preserves the dominant stair
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 19. Observed and predicted gravity gradient data. (a) Observed gravity gradient with 5% Gaussian noise added; (b) predicted gravity gradient; (c) gravity gradient difference between the observed and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
+<p align="center"><em>Observed and predicted gravity gradient data. (a) Observed gravity gradient with 5% Gaussian noise added; (b) predicted gravity gradient; (c) gravity gradient difference between the observed and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
 
 ### Field data example
 
@@ -523,7 +523,7 @@ This section follows Section 3.5 of the manuscript and keeps the same figure ord
     </td>
   </tr>
 </table>
-<p align="center"><em>Fig. 20. Measured and predicted airborne gravity gradient fields. (a) Measured airborne gravity gradient data; (b) predicted airborne gravity gradient data; (c) airborne gravity gradient differences between the measured and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
+<p align="center"><em>Measured and predicted airborne gravity gradient fields. (a) Measured airborne gravity gradient data; (b) predicted airborne gravity gradient data; (c) airborne gravity gradient differences between the measured and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
 
 <table align="center">
   <tr>
@@ -553,9 +553,6 @@ This section follows Section 3.5 of the manuscript and keeps the same figure ord
   <tr>
     <td align="center" width="50%">
       <img src="Field%20data%20example/Field%20data%20example/3D%20view%20of%20the%20predicted%20density%20model/isosurface_pred.png" width="100%" alt="Fig. 22 predicted density model, isosurface view.">
-    </td>
-    <td align="center" width="50%">
-      <img src="Field%20data%20example/Field%20data%20example/3D%20view%20of%20the%20predicted%20density%20model/voxel_pred.png" width="100%" alt="Fig. 22 predicted density model, voxel view.">
     </td>
   </tr>
 </table>
