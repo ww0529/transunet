@@ -142,9 +142,9 @@ python folder_validation_test.py \
 The following figures are the high-resolution validation snapshots produced by the scripted validation workflow. These images are already included in the repository for direct inspection.
 
 <p align="center">
-  <img src="folder_validation_results/vis_highres/epoch_0000_highres.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
-  <img src="folder_validation_results/vis_highres/epoch_0001_highres.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
-  <img src="folder_validation_results/vis_highres/epoch_0002_highres.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
+  <img src="test_code/vis_highres/epoch_0000_highres.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
+  <img src="test_code/vis_highres/epoch_0001_highres.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
+  <img src="test_code/vis_highres/epoch_0002_highres.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
 </p>
 <p align="center"><em>High-resolution validation figures exported by HighResVisualizer.</em></p>
 
@@ -153,54 +153,54 @@ The following figures are the high-resolution validation snapshots produced by t
 This example corresponds to the simple synthetic benchmark in the manuscript. The goal is for the network to reconstruct a compact anomalous body whose location, extent, and boundaries are as accurate as possible.
 
 <p align="center">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/isosurface/isosurface_pred.png" width="49%" alt="True and predicted isosurfaces.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/isosurface/isosurface_pred.png" width="49%" alt="True and predicted isosurfaces.">
 </p>
 <p align="center"><em>True and predicted isosurfaces.</em></p>
 
 <p align="center">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/voxel_model/voxel_true.png" width="49%" alt="True and predicted voxel models.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/voxel_model/voxel_pred.png" width="49%" alt="True and predicted voxel models.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/voxel_model/voxel_true.png" width="49%" alt="True and predicted voxel models.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/voxel_model/voxel_pred.png" width="49%" alt="True and predicted voxel models.">
 </p>
 <p align="center"><em>True and predicted voxel models.</em></p>
 
 <p align="center">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/true_2d/true_x_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/true_2d/true_y_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/true_2d/true_z_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/true_2d/true_x_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/true_2d/true_y_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/true_2d/true_z_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
 </p>
 <p align="center"><em>True orthogonal slices along x, y, and z.</em></p>
 
 <p align="center">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/pred_2d/x_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/pred_2d/y_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/pred_2d/z_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_2d/x_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_2d/y_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_2d/z_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
 </p>
 <p align="center"><em>Predicted orthogonal slices along x, y, and z.</em></p>
 
 <p align="center">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/slice_3d/true_3d_x_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/slice_3d/true_3d_y_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/slice_3d/true_3d_z_slice.png" width="32%" alt="True 3D slice renderings.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/slice_3d/true_3d_x_slice.png" width="32%" alt="True 3D slice renderings.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/slice_3d/true_3d_y_slice.png" width="32%" alt="True 3D slice renderings.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/slice_3d/true_3d_z_slice.png" width="32%" alt="True 3D slice renderings.">
 </p>
 <p align="center"><em>True 3D slice renderings.</em></p>
 
 <p align="center">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/pred_slice_3d/3d_x_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/pred_slice_3d/3d_y_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/pred_slice_3d/3d_z_slice.png" width="32%" alt="Predicted 3D slice renderings.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_slice_3d/3d_x_slice.png" width="32%" alt="Predicted 3D slice renderings.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_slice_3d/3d_y_slice.png" width="32%" alt="Predicted 3D slice renderings.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_slice_3d/3d_z_slice.png" width="32%" alt="Predicted 3D slice renderings.">
 </p>
 <p align="center"><em>Predicted 3D slice renderings.</em></p>
 
 <p align="center">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/gravity/observed_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/gravity/forward_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/observed_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/forward_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
 </p>
 <p align="center"><em>Observed and forward-modelled Gzz maps.</em></p>
 
 <p align="center">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/gravity/residual.png" width="49%" alt="Residual map and residual histogram.">
-  <img src="examples/example%20one/Synthetic%20Model%20Inversion/gravity/histogram.png" width="49%" alt="Residual map and residual histogram.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/residual.png" width="49%" alt="Residual map and residual histogram.">
+  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/histogram.png" width="49%" alt="Residual map and residual histogram.">
 </p>
 <p align="center"><em>Residual map and residual histogram.</em></p>
 
@@ -209,54 +209,54 @@ This example corresponds to the simple synthetic benchmark in the manuscript. Th
 This example corresponds to the more complex positive-negative anomaly combination scenario in the manuscript. The focus is on the model's ability to recover anomaly polarity and suppress cross-talk between different anomalous bodies.
 
 <p align="center">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/isosurface/isosurface_pred.png" width="49%" alt="True and predicted isosurfaces.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/isosurface/isosurface_pred.png" width="49%" alt="True and predicted isosurfaces.">
 </p>
 <p align="center"><em>True and predicted isosurfaces.</em></p>
 
 <p align="center">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/voxel_model/voxel_true.png" width="49%" alt="True and predicted voxel models.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/voxel_model/voxel_pred.png" width="49%" alt="True and predicted voxel models.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/voxel_model/voxel_true.png" width="49%" alt="True and predicted voxel models.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/voxel_model/voxel_pred.png" width="49%" alt="True and predicted voxel models.">
 </p>
 <p align="center"><em>True and predicted voxel models.</em></p>
 
 <p align="center">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/true_slice_2d/true_x_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/true_slice_2d/true_y_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/true_slice_2d/true_z_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_2d/true_x_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_2d/true_y_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_2d/true_z_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
 </p>
 <p align="center"><em>True orthogonal slices along x, y, and z.</em></p>
 
 <p align="center">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/pred_slice_2d/x_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/pred_slice_2d/y_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/pred_slice_2d/z_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_2d/x_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_2d/y_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_2d/z_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
 </p>
 <p align="center"><em>Predicted orthogonal slices along x, y, and z.</em></p>
 
 <p align="center">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/true_slice_3d/true_3d_x_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/true_slice_3d/true_3d_y_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/true_slice_3d/true_3d_z_slice.png" width="32%" alt="True 3D slice renderings.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_3d/true_3d_x_slice.png" width="32%" alt="True 3D slice renderings.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_3d/true_3d_y_slice.png" width="32%" alt="True 3D slice renderings.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_3d/true_3d_z_slice.png" width="32%" alt="True 3D slice renderings.">
 </p>
 <p align="center"><em>True 3D slice renderings.</em></p>
 
 <p align="center">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/pred_slice_3d/3d_x_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/pred_slice_3d/3d_y_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/pred_slice_3d/3d_z_slice.png" width="32%" alt="Predicted 3D slice renderings.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_3d/3d_x_slice.png" width="32%" alt="Predicted 3D slice renderings.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_3d/3d_y_slice.png" width="32%" alt="Predicted 3D slice renderings.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_3d/3d_z_slice.png" width="32%" alt="Predicted 3D slice renderings.">
 </p>
 <p align="center"><em>Predicted 3D slice renderings.</em></p>
 
 <p align="center">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/gravity/observed_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/gravity/forward_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/observed_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/forward_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
 </p>
 <p align="center"><em>Observed and forward-modelled Gzz maps.</em></p>
 
 <p align="center">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/gravity/residual.png" width="49%" alt="Residual map and residual histogram.">
-  <img src="examples/example%20two/Complex%20Geological%20Structure/gravity/histogram.png" width="49%" alt="Residual map and residual histogram.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/residual.png" width="49%" alt="Residual map and residual histogram.">
+  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/histogram.png" width="49%" alt="Residual map and residual histogram.">
 </p>
 <p align="center"><em>Residual map and residual histogram.</em></p>
 
@@ -265,54 +265,54 @@ This example corresponds to the more complex positive-negative anomaly combinati
 This example corresponds to the staircase-style terrain synthetic test with higher structural complexity in the manuscript. It is used to evaluate the model's ability to recover sharp faults, layered boundaries, and geological geometries that are closer to piecewise-constant structures.
 
 <p align="center">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/isosurface/isosurface_pred.png" width="49%" alt="True and predicted isosurfaces.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/isosurface/isosurface_pred.png" width="49%" alt="True and predicted isosurfaces.">
 </p>
 <p align="center"><em>True and predicted isosurfaces.</em></p>
 
 <p align="center">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/voxel_model/voxel_true.png" width="49%" alt="True and predicted voxel models.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/voxel_model/voxel_pred.png" width="49%" alt="True and predicted voxel models.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/voxel_model/voxel_true.png" width="49%" alt="True and predicted voxel models.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/voxel_model/voxel_pred.png" width="49%" alt="True and predicted voxel models.">
 </p>
 <p align="center"><em>True and predicted voxel models.</em></p>
 
 <p align="center">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/true_2d/true_x_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/true_2d/true_y_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/true_2d/true_z_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_2d/true_x_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_2d/true_y_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_2d/true_z_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
 </p>
 <p align="center"><em>True orthogonal slices along x, y, and z.</em></p>
 
 <p align="center">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/pred_2d/x_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/pred_2d/y_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/pred_2d/z_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_2d/x_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_2d/y_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_2d/z_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
 </p>
 <p align="center"><em>Predicted orthogonal slices along x, y, and z.</em></p>
 
 <p align="center">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/true_slice_3d/true_3d_x_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/true_slice_3d/true_3d_y_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/true_slice_3d/true_3d_z_slice.png" width="32%" alt="True 3D slice renderings.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_slice_3d/true_3d_x_slice.png" width="32%" alt="True 3D slice renderings.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_slice_3d/true_3d_y_slice.png" width="32%" alt="True 3D slice renderings.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_slice_3d/true_3d_z_slice.png" width="32%" alt="True 3D slice renderings.">
 </p>
 <p align="center"><em>True 3D slice renderings.</em></p>
 
 <p align="center">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/pred_slice_3d/3d_x_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/pred_slice_3d/3d_y_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/pred_slice_3d/3d_z_slice.png" width="32%" alt="Predicted 3D slice renderings.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_slice_3d/3d_x_slice.png" width="32%" alt="Predicted 3D slice renderings.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_slice_3d/3d_y_slice.png" width="32%" alt="Predicted 3D slice renderings.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_slice_3d/3d_z_slice.png" width="32%" alt="Predicted 3D slice renderings.">
 </p>
 <p align="center"><em>Predicted 3D slice renderings.</em></p>
 
 <p align="center">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/gravity/observed_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/gravity/forward_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/observed_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/forward_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
 </p>
 <p align="center"><em>Observed and forward-modelled Gzz maps.</em></p>
 
 <p align="center">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/gravity/residual.png" width="49%" alt="Residual map and residual histogram.">
-  <img src="examples/example%20three/Complex%20Terrain%20Model/gravity/histogram.png" width="49%" alt="Residual map and residual histogram.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/residual.png" width="49%" alt="Residual map and residual histogram.">
+  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/histogram.png" width="49%" alt="Residual map and residual histogram.">
 </p>
 <p align="center"><em>Residual map and residual histogram.</em></p>
 
