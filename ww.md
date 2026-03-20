@@ -549,16 +549,7 @@ This section follows Section 3.5 of the manuscript and keeps the same figure ord
 </table>
 <p align="center"><em>Slices of the predicted density model. (a) 3D slice along x = 2000 m; (b) 2D slice along x = 2000 m; (c) 3D slice along y = 2000 m; and (d) 2D slice along y = 2000 m.</em></p>
 
-<table align="center">
-  <tr>
-    <td align="center" width="50%">
-      <img src="Field%20data%20example/Field%20data%20example/3D%20view%20of%20the%20predicted%20density%20model/isosurface_pred.png" width="100%" alt="Predicted density isosurface.">
-      <br><em>(a)</em>
-    </td>
-    <td align="center" width="50%">
-      <img src="Field%20data%20example/Field%20data%20example/3D%20view%20of%20the%20predicted%20density%20model/voxel_pred.png" width="100%" alt="Predicted density voxel model.">
-      <br><em>(b)</em>
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <img src="Field%20data%20example/Field%20data%20example/3D%20view%20of%20the%20predicted%20density%20model/isosurface_pred.png" width="49%" alt="Predicted density isosurface.">
+</p>
 <p align="center"><em>3D view of the predicted density model.</em></p>
