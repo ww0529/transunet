@@ -27,9 +27,9 @@ This network is the hybrid 2D-3D Transformer proposed in the manuscript. It firs
 │       ├── 3D slice/
 │       ├── 3D view of the predicted density model/
 │       └── gravity/
-├── folder_validation_results/
+├── test_code/
 ├── best_model.pth
-├── folder_validation_test.py
+├── test_code.py
 └── README.md
 ```
 Here, source code/ contains the core training and data-generation code corresponding to the manuscript method, examples/ and Field data example/ contain real-data examples, and  test_code.py correspond to the scripted validation , respectively. ```
