@@ -143,11 +143,11 @@ python test_code.py \
 The following figures are the high-resolution outputs produced by the scripted validation workflow. These images are already included in the repository for direct inspection.
 
 <p align="center">
-  <img src="test_code/vis_highres/Synthetic%20example%20one-prism%20model.png" width="32%" alt="Scripted validation figure for the one-prism example.">
-  <img src="test_code/vis_highres/Synthetic%20example%20one-two%20staircase%20models.png" width="32%" alt="Scripted validation figure for the two-staircase example.">
-  <img src="test_code/vis_highres/Synthetic%20example%20one-two%20prisms%20model.png" width="32%" alt="Scripted validation figure for the two-prism example.">
+  <img src="test_code/Synthetic%20example%20one-prism%20model.png" width="32%" alt="test.">
+  <img src="test_code/Synthetic%20example%20one-two%20staircase%20models.png" width="32%" alt="test.">
+  <img src="test_code/Synthetic%20example%20one-two%20prisms%20model.png" width="32%" alt="test.">
 </p>
-<p align="center"><em>High-resolution scripted validation figures for the three bundled synthetic examples.</em></p>
+<p align="center"><em>test.</em></p>.</em></p>>
 
 ### Synthetic example one-prism model
 
