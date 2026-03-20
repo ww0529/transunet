@@ -150,7 +150,7 @@ The following figures are the high-resolution validation snapshots produced by t
 
 ### Synthetic example one-prism model
 
-This example corresponds to the simple synthetic benchmark in the manuscript. The goal is for the network to reconstruct a compact anomalous body whose location, extent, and boundaries are as accurate as possible.
+This example corresponds to the synthetic example one-prism model in the manuscript. The goal is for the network to reconstruct a compact anomalous body whose location, extent, and boundaries are as accurate as possible.
 
 <p align="center">
   <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
@@ -206,7 +206,7 @@ This example corresponds to the simple synthetic benchmark in the manuscript. Th
 
 ###  Synthetic example one-two prisms model
 
-This example corresponds to the more complex positive-negative anomaly combination scenario in the manuscript. The focus is on the model's ability to recover anomaly polarity and suppress cross-talk between different anomalous bodies.
+This example corresponds to Synthetic example one-two prisms model in the manuscript. The focus is on the model's ability to recover anomaly polarity and suppress cross-talk between different anomalous bodies.
 
 <p align="center">
   <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
@@ -262,7 +262,7 @@ This example corresponds to the more complex positive-negative anomaly combinati
 
 ### Synthetic example one-two staircase models
 
-This example corresponds to the staircase-style terrain synthetic test with higher structural complexity in the manuscript. It is used to evaluate the model's ability to recover sharp faults, layered boundaries, and geological geometries that are closer to piecewise-constant structures.
+This example corresponds to Synthetic example one-two staircase models in the manuscript. It is used to evaluate the model's ability to recover sharp faults, layered boundaries, and geological geometries that are closer to piecewise-constant structures.
 
 <p align="center">
   <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
