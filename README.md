@@ -4,7 +4,7 @@
 <p align="center">
   <img src="Network%20architecture.jpg" width="88%" alt="The architecture of the proposed deep learning convolutional neural network.">
 </p>
-<p align="center"><em>Schematic of the Hybrid 2D-3D Transformer for 3D density gravity inversion proposed in the manuscript.</em></p>
+<p align="center"><em>The architecture of the proposed deep learning convolutional neural network.</em></p>
 
 This network is the hybrid 2D-3D Transformer proposed in the manuscript. It first extracts 2D features from surface gravity responses, then lifts the 2D features into an initial 3D volume through the Channel-to-Depth Lifting module. A 3D Transformer is subsequently used to model global spatial correlations, and cross-dimensional attention is incorporated during decoding to progressively recover the 3D density distribution. By default, the input is composed of `Gz`, `Gzz`, and normalized depth encoding, so that gravity anomalies, gravity gradients, and depth prior information can all be utilized simultaneously.
 
