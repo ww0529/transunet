@@ -146,12 +146,7 @@ The following figures are the high-resolution validation snapshots produced by t
   <img src="test_code/vis_highres/Synthetic%20example%20one-two%20staircase%20models.png" width="32%" alt="test.">
   <img src="test_code/vis_highres/Synthetic%20example%20one-two%20prisms%20model.png" width="32%" alt="test.">
 </p>
-<p align="center"><em><p align="center">
-  <img src="test_code/vis_highres/Synthetic%20example%20one-prism%20model.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
-  <img src="test_code/vis_highres/Synthetic%20example%20one-two%20staircase%20models.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
-  <img src="test_code/vis_highres/Synthetic%20example%20one-two%20prisms%20model.png" width="32%" alt="High-resolution validation snapshot exported by HighResVisualizer.">
-</p>
-<p align="center"><em>High-resolution validation figures exported by HighResVisualizer.</em></p>.</em></p>
+<p align="center"><em>test.</em></p>.</em></p>
 
 ### Synthetic example one-prism model
 
