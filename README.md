@@ -46,7 +46,7 @@ This repository currently includes:
 - the main training and model-definition code in [`source code/`](source%20code/)
 - the best model checkpoint `best_model.pth` obtained from a 400-epoch training run
 - three synthetic `.vti` examples and their result figures in `examples/`
-- the validation script [`folder_validation_test.py`](folder_validation_test.py) for testing trained results
+- the validation script [`test_code.py`](test_code.py) for testing trained results
 - the real data file `Field data example/Gzz.txt` and the corresponding inversion figures
 - evaluation results stored in `folder_validation_results/`
 
@@ -148,7 +148,7 @@ The following figures are the high-resolution validation snapshots produced by t
 </p>
 <p align="center"><em>High-resolution validation figures exported by HighResVisualizer.</em></p>
 
-### Synthetic Model Inversion
+### Synthetic example one-prism model
 
 This example corresponds to the simple synthetic benchmark in the manuscript. The goal is for the network to reconstruct a compact anomalous body whose location, extent, and boundaries are as accurate as possible.
 
@@ -204,7 +204,7 @@ This example corresponds to the simple synthetic benchmark in the manuscript. Th
 </p>
 <p align="center"><em>Residual map and residual histogram.</em></p>
 
-### Complex Geological Structure
+###  Synthetic example one-two prisms model
 
 This example corresponds to the more complex positive-negative anomaly combination scenario in the manuscript. The focus is on the model's ability to recover anomaly polarity and suppress cross-talk between different anomalous bodies.
 
@@ -260,7 +260,7 @@ This example corresponds to the more complex positive-negative anomaly combinati
 </p>
 <p align="center"><em>Residual map and residual histogram.</em></p>
 
-### Complex Terrain Model
+### Synthetic example one-two staircase models
 
 This example corresponds to the staircase-style terrain synthetic test with higher structural complexity in the manuscript. It is used to evaluate the model's ability to recover sharp faults, layered boundaries, and geological geometries that are closer to piecewise-constant structures.
 
