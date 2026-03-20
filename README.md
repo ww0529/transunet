@@ -142,9 +142,9 @@ python test_code.py \
 The following figures are the high-resolution validation snapshots produced by the scripted validation workflow. These images are already included in the repository for direct inspection.
 
 <p align="center">
-  <img src="test_code/vis_highres/Synthetic%20example%20one-prism%20model.png" width="32%" alt="test.">
-  <img src="test_code/vis_highres/Synthetic%20example%20one-two%20staircase%20models.png" width="32%" alt="test.">
-  <img src="test_code/vis_highres/Synthetic%20example%20one-two%20prisms%20model.png" width="32%" alt="test.">
+  <img src="test_code/Synthetic%20example%20one-prism%20model.png" width="32%" alt="test.">
+  <img src="test_code/Synthetic%20example%20one-two%20staircase%20models.png" width="32%" alt="test.">
+  <img src="test_code/Synthetic%20example%20one-two%20prisms%20model.png" width="32%" alt="test.">
 </p>
 <p align="center"><em>test.</em></p>.</em></p>
 
