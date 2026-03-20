@@ -9,7 +9,9 @@ from typing import Any, Dict, List, Tuple
 
 import matplotlib
 matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.gridspec import GridSpec
 from scipy.ndimage import zoom
 
 try:
@@ -48,6 +50,115 @@ from train_code import (
     PhysicsInformedUNet,
     V4Metrics,
 )
+
+
+class FileNamedHighResVisualizer(HighResVisualizer):
+    """Save high-resolution figures with VTI-derived filenames and no titles."""
+
+    @staticmethod
+    def _sanitize_case_name(case_name: str) -> str:
+        invalid = '<>:"/\\|?*'
+        sanitized = "".join("_" if ch in invalid else ch for ch in case_name).strip()
+        return sanitized or "highres_result"
+
+    def save_case_result(
+        self,
+        case_name: str,
+        obs_gravity: np.ndarray,
+        pred_gravity: np.ndarray,
+        true_density: np.ndarray,
+        pred_density: np.ndarray,
+        dx: float = 100.0,
+        dz: float = 100.0,
+    ) -> str:
+        fig = plt.figure(figsize=(16, 14))
+        gs = GridSpec(3, 3, figure=fig, height_ratios=[1, 1.2, 1.5], hspace=0.25, wspace=0.3)
+
+        nz, ny, nx = true_density.shape
+        depth_km = nz * dz / 1000
+
+        obs_up = self._upsample(obs_gravity)
+        pred_up = self._upsample(pred_gravity)
+        residual = obs_gravity - pred_gravity
+        res_up = self._upsample(residual)
+        extent_up = [0, nx * dx / 1000, ny * dx / 1000, 0]
+
+        ax1 = fig.add_subplot(gs[0, 0])
+        vmax = max(abs(obs_up.max()), abs(obs_up.min()))
+        im1 = ax1.imshow(obs_up, cmap="jet", extent=extent_up, vmin=-vmax, vmax=vmax)
+        ax1.set_xlabel("X (km)")
+        ax1.set_ylabel("Y (km)")
+        plt.colorbar(im1, ax=ax1, fraction=0.046, pad=0.04)
+
+        ax2 = fig.add_subplot(gs[0, 1])
+        im2 = ax2.imshow(pred_up, cmap="jet", extent=extent_up, vmin=-vmax, vmax=vmax)
+        ax2.set_xlabel("X (km)")
+        ax2.set_ylabel("Y (km)")
+        plt.colorbar(im2, ax=ax2, fraction=0.046, pad=0.04)
+
+        ax3 = fig.add_subplot(gs[0, 2])
+        res_max = max(abs(res_up.max()), abs(res_up.min()))
+        im3 = ax3.imshow(res_up, cmap="RdBu_r", extent=extent_up, vmin=-res_max, vmax=res_max)
+        ax3.set_xlabel("X (km)")
+        ax3.set_ylabel("Y (km)")
+        plt.colorbar(im3, ax=ax3, fraction=0.046, pad=0.04)
+
+        ax4 = fig.add_subplot(gs[1, 0], projection="3d")
+        self._plot_3d_slices(ax4, true_density, dx, dz, "")
+
+        ax5 = fig.add_subplot(gs[1, 1], projection="3d")
+        self._plot_3d_slices(ax5, pred_density, dx, dz, "")
+
+        ax_info = fig.add_subplot(gs[1, 2])
+        ax_info.axis("off")
+        info_text = (
+            f"Info:\n"
+            f"Enhanced Visualization\n"
+            f"Upsampling: {self.upsampling}x\n"
+            f"DPI: {self.dpi}\n"
+            f"Depth: {depth_km:.2f}km\n"
+            f"\n"
+            f"Grid: {nz}x{ny}x{nx}\n"
+            f"dx: {dx}m, dz: {dz}m\n"
+            f"\n"
+            f"Gravity Range:\n"
+            f"  Obs: [{obs_gravity.min():.2f}, {obs_gravity.max():.2f}]\n"
+            f"  Pred: [{pred_gravity.min():.2f}, {pred_gravity.max():.2f}]\n"
+            f"  RMSE: {np.sqrt(np.mean(residual ** 2)):.4f}"
+        )
+        ax_info.text(
+            0.1,
+            0.9,
+            info_text,
+            transform=ax_info.transAxes,
+            fontsize=10,
+            verticalalignment="top",
+            fontfamily="monospace",
+            bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.5),
+        )
+
+        ax6 = fig.add_subplot(gs[2, 0], projection="3d")
+        self._plot_voxel_body(ax6, true_density, dx, dz, "")
+
+        ax7 = fig.add_subplot(gs[2, 1], projection="3d")
+        self._plot_voxel_body(ax7, pred_density, dx, dz, "")
+
+        ax8 = fig.add_subplot(gs[2, 2])
+        error = np.abs(pred_density - true_density)
+        depth_error = error.mean(axis=(1, 2))
+        depths = np.arange(nz) * dz / 1000
+        ax8.barh(depths, depth_error, height=dz / 1000 * 0.8, color="coral", edgecolor="darkred")
+        ax8.set_xlabel("Mean Absolute Error", fontsize=10)
+        ax8.set_ylabel("Depth (km)", fontsize=10)
+        ax8.invert_yaxis()
+        ax8.grid(True, alpha=0.3)
+
+        safe_name = self._sanitize_case_name(case_name)
+        save_path = Path(self.save_dir) / f"{safe_name}.png"
+        plt.savefig(str(save_path), dpi=self.dpi, bbox_inches="tight", facecolor="white", edgecolor="none")
+        plt.close(fig)
+        print(f"Saved high-res visualization: {save_path}")
+        return str(save_path)
 
 
 def parse_args() -> argparse.Namespace:
@@ -327,7 +438,7 @@ def evaluate_folder_models(
     forward_op = DifferentiableForward(cfg.grid_shape, cfg.dx, cfg.dz).to(device)
     criterion = ComprehensiveLoss(cfg, forward_op)
     metrics = V4Metrics()
-    visualizer = HighResVisualizer(str(output_dir), dpi=220, upsampling=2)
+    visualizer = FileNamedHighResVisualizer(str(output_dir), dpi=220, upsampling=2)
 
     model.eval()
     total_loss = 0.0
@@ -374,7 +485,7 @@ def evaluate_folder_models(
 
             case_dir = output_dir / f"{case_index:02d}_{name.lower().replace(' ', '_')}"
             save_case_arrays(case_dir, pred_np, true_np, obs_np, pred_grav_np)
-            visualizer.save_epoch_result(case_index, obs_np, pred_grav_np, true_np, pred_np, cfg.dx, cfg.dz)
+            visualizer.save_case_result(name, obs_np, pred_grav_np, true_np, pred_np, cfg.dx, cfg.dz)
 
             row = {
                 "report_type": "case",
