@@ -129,13 +129,13 @@ Both the manuscript and the code focus on three typical examples: a simple singl
 
 ## Run Test Codes
 
-To perform scripted validation on the bundled `.vti` examples, use [`folder_validation_test.py`](folder_validation_test.py). This script loads `best_model.pth`, performs forward modelling to construct the required network input, runs inference on all `.vti` models under `examples/`, and writes `metrics.json`, `summary.csv`, `summary.json`, NumPy arrays, and high-resolution figures to `folder_validation_results/`.
+To perform scripted validation on the bundled `.vti` examples, use [`test_code.py`](test_code.py). This script loads `best_model.pth`, performs forward modelling to construct the required network input, runs inference on all `.vti` models under `examples/`, and writes `metrics.json`, `summary.csv`, `summary.json`, NumPy arrays, and high-resolution figures to `text_code/`.
 
 ```bash
-python folder_validation_test.py \
+python test_code.py \
   --checkpoint best_model.pth \
   --models-dir examples \
-  --output-dir folder_validation_results \
+  --output-dir test_code \
   --device auto
 ```
 
