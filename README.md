@@ -155,9 +155,10 @@ This example corresponds to the synthetic example one-prism model in the manuscr
 
 <p align="center">
   <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/isosurface/isosurface_true.png" width="49%" alt="a.">
+  <p align="center"><em>(a).</em></p>
   <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/isosurface/isosurface_pred.png" width="49%" alt="b.">
 </p>
-<p align="center"><em>3D view of the prism model: (a) synthetic model and (b) predicted model..</em></p>
+<p align="center"><em>3D view of the prism model: (a) synthetic model and (b) predicted model.</em></p>
 
 <p align="center">
   <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/true_2d/true_x_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
