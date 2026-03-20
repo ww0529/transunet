@@ -130,7 +130,7 @@ Both the manuscript and the code focus on three typical examples: a Synthetic ex
 
 ## Run Test Codes
 
-To perform scripted validation on the bundled `.vti` examples, use [`test_code.py`](test_code.py). This script loads `best_model.pth`, performs forward modelling to construct the required network input, runs inference on all `.vti` models under `examples/`, and writes `metrics.json`, `summary.csv`, `summary.json`, NumPy arrays, and high-resolution figures to `text_code/`.
+To perform scripted validation on the bundled `.vti` examples, use [`test_code.py`](test_code.py). This script loads `best_model.pth`, performs forward modelling to construct the required network input, runs inference on all `.vti` models under `examples/`, and writes `metrics.json`, `summary.csv`, `summary.json`, NumPy arrays, and high-resolution figures to `test_code/`.
 
 ```bash
 python test_code.py \
@@ -140,219 +140,416 @@ python test_code.py \
   --device auto
 ```
 
-The following figures are the Test image produced by the scripted validation workflow. These images are already included in the repository for direct inspection.
+The following figures are the high-resolution outputs produced by the scripted validation workflow. These images are already included in the repository for direct inspection.
 
 <p align="center">
   <img src="test_code/Synthetic%20example%20one-prism%20model.png" width="32%" alt="test.">
   <img src="test_code/Synthetic%20example%20one-two%20staircase%20models.png" width="32%" alt="test.">
   <img src="test_code/Synthetic%20example%20one-two%20prisms%20model.png" width="32%" alt="test.">
 </p>
-<p align="center"><em>test.</em></p>.</em></p>
+<p align="center"><em>test</em></p></em></p>
 
 ### Synthetic example one-prism model
 
-This example corresponds to the synthetic example one-prism model in the manuscript. The goal is for the network to reconstruct a compact anomalous body whose location, extent, and boundaries are as accurate as possible.
+This section follows Section 3.3 of the manuscript. The benchmark contains a single rectangular prism at `x = 800-2400 m`, `y = 800-2400 m`, and `z = 500-1200 m`, with a density contrast of `0.5 kg/m^3` in an otherwise zero-density background. As discussed in the paper, the predicted model preserves the prism location and overall morphology with only minor boundary smoothing.
 
-<p align="center">
-  <table>
-    <tr>
-      <td align="center">
-        <img src="examples/example one/Synthetic example one-prism model/isosurface/isosurface_true.png" width="100%" alt="(a)">
-        <br><em>(a) Synthetic model</em>
-      </td>
-      <td align="center">
-        <img src="examples/example one/Synthetic example one-prism model/isosurface/isosurface_pred.png" width="100%" alt="(b)">
-        <br><em>(b) Predicted model</em>
-      </td>
-    </tr>
-  </table>
-</p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/isosurface/isosurface_true.png" width="100%" alt="Fig. 5a synthetic prism model.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/isosurface/isosurface_pred.png" width="100%" alt="Fig. 5b predicted prism model.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+</table>
 <p align="center"><em>3D view of the prism model: (a) synthetic model and (b) predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/true_2d/true_x_slice.png" width="32%" alt="a.">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/true_2d/true_y_slice.png" width="32%" alt="b.">
-    <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_2d/x_slice.png" width="32%" alt="c.">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_2d/y_slice.png" width="32%" alt="d.">
-</p>
-<p align="center"><em>True orthogonal slices along x, y, and z.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/slice_3d/true_3d_x_slice.png" width="100%" alt="Fig. 6a 3D view of the synthetic model along x = 2000 m.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_slice_3d/3d_x_slice.png" width="100%" alt="Fig. 6b 3D view of the predicted model along x = 2000 m.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/true_2d/true_x_slice.png" width="100%" alt="Fig. 6c 2D view of the synthetic model along x = 2000 m.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_2d/x_slice.png" width="100%" alt="Fig. 6d 2D view of the predicted model along x = 2000 m.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the synthetic and predicted density models along x = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_2d/x_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_2d/y_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-</p>
-<p align="center"><em>Predicted orthogonal slices along x, y, and z.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/slice_3d/true_3d_y_slice.png" width="100%" alt="Fig. 7a 3D view of the synthetic model along y = 2000 m.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_slice_3d/3d_y_slice.png" width="100%" alt="Fig. 7b 3D view of the predicted model along y = 2000 m.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/true_2d/true_y_slice.png" width="100%" alt="Fig. 7c 2D view of the synthetic model along y = 2000 m.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_2d/y_slice.png" width="100%" alt="Fig. 7d 2D view of the predicted model along y = 2000 m.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the synthetic and predicted density models along y = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/slice_3d/true_3d_x_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/slice_3d/true_3d_y_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/slice_3d/true_3d_z_slice.png" width="32%" alt="True 3D slice renderings.">
-</p>
-<p align="center"><em>True 3D slice renderings.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/slice_3d/true_3d_z_slice.png" width="100%" alt="Fig. 8a 3D view of the synthetic model along z = 1000 m.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_slice_3d/3d_z_slice.png" width="100%" alt="Fig. 8b 3D view of the predicted model along z = 1000 m.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/true_2d/true_z_slice.png" width="100%" alt="Fig. 8c 2D view of the synthetic model along z = 1000 m.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_2d/z_slice.png" width="100%" alt="Fig. 8d 2D view of the predicted model along z = 1000 m.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the synthetic and predicted density models along z = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_slice_3d/3d_x_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_slice_3d/3d_y_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/pred_slice_3d/3d_z_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-</p>
-<p align="center"><em>Predicted 3D slice renderings.</em></p>
+The gravity gradient comparison also follows the manuscript: the forward-modelled `Gzz` field from the predicted density model closely matches the observed field, and the residuals remain small and approximately zero-centered.
 
-<p align="center">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/observed_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/forward_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
-</p>
-<p align="center"><em>Observed and forward-modelled Gzz maps.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/observed_gzz.png" width="100%" alt="Fig. 9a observed gravity gradient with 5 percent Gaussian noise added.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/forward_gzz.png" width="100%" alt="Fig. 9b predicted gravity gradient.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/residual.png" width="100%" alt="Fig. 9c gravity gradient difference between the observed and predicted data.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/histogram.png" width="100%" alt="Fig. 9d histogram of the gravity gradient differences.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Observed and predicted gravity gradient data. (a) Observed gravity gradient with 5% Gaussian noise added; (b) predicted gravity gradient; (c) gravity gradient difference between the observed and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
 
-<p align="center">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/residual.png" width="49%" alt="Residual map and residual histogram.">
-  <img src="examples/example%20one/Synthetic%20example%20one-prism%20model/gravity/histogram.png" width="49%" alt="Residual map and residual histogram.">
-</p>
-<p align="center"><em>Residual map and residual histogram.</em></p>
+### Synthetic example one-two prisms model
 
-###  Synthetic example one-two prisms model
+This section follows the two-prism experiment in the manuscript. The synthetic model contains a positive prism with density contrast `0.5 kg/m^3` at `x = 600-1200 m`, `y = 600-1200 m`, `z = 500-1200 m`, and a negative prism with density contrast `-0.5 kg/m^3` at `x = 1800-2300 m`, `y = 600-1200 m`, `z = 500-1200 m`. The paper uses this example to verify polarity recovery, spatial separation, and suppression of cross-talk between adjacent anomalies.
 
-This example corresponds to Synthetic example one-two prisms model in the manuscript. The focus is on the model's ability to recover anomaly polarity and suppress cross-talk between different anomalous bodies.
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/isosurface/isosurface_true.png" width="100%" alt="Fig. 10a synthetic two-prism model.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/isosurface/isosurface_pred.png" width="100%" alt="Fig. 10b predicted two-prism model.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>3D view of the two prisms model: (a) synthetic model and (b) predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/isosurface/isosurface_pred.png" width="49%" alt="True and predicted isosurfaces.">
-</p>
-<p align="center"><em>True and predicted isosurfaces.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_3d/true_3d_x_slice.png" width="100%" alt="Fig. 11a 3D view of the synthetic model along x = 1000 m.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_3d/3d_x_slice.png" width="100%" alt="Fig. 11b 3D view of the predicted model along x = 1000 m.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_2d/true_x_slice.png" width="100%" alt="Fig. 11c 2D view of the synthetic model along x = 1000 m.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_2d/x_slice.png" width="100%" alt="Fig. 11d 2D view of the predicted model along x = 1000 m.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the synthetic and predicted density models along x = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/voxel_model/voxel_true.png" width="49%" alt="True and predicted voxel models.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/voxel_model/voxel_pred.png" width="49%" alt="True and predicted voxel models.">
-</p>
-<p align="center"><em>True and predicted voxel models.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_3d/true_3d_y_slice.png" width="100%" alt="Fig. 12a 3D view of the synthetic model along y = 1500 m.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_3d/3d_y_slice.png" width="100%" alt="Fig. 12b 3D view of the predicted model along y = 1500 m.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_2d/true_y_slice.png" width="100%" alt="Fig. 12c 2D view of the synthetic model along y = 1500 m.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_2d/y_slice.png" width="100%" alt="Fig. 12d 2D view of the predicted model along y = 1500 m.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the synthetic and predicted density models along y = 1500 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_2d/true_x_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_2d/true_y_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_2d/true_z_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-</p>
-<p align="center"><em>True orthogonal slices along x, y, and z.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_3d/true_3d_z_slice.png" width="100%" alt="Fig. 13a 3D view of the synthetic model along z = 1000 m.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_3d/3d_z_slice.png" width="100%" alt="Fig. 13b 3D view of the predicted model along z = 1000 m.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_2d/true_z_slice.png" width="100%" alt="Fig. 13c 2D view of the synthetic model along z = 1000 m.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_2d/z_slice.png" width="100%" alt="Fig. 13d 2D view of the predicted model along z = 1000 m.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the synthetic and predicted density models along z = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_2d/x_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_2d/y_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_2d/z_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-</p>
-<p align="center"><em>Predicted orthogonal slices along x, y, and z.</em></p>
+The manuscript emphasizes that the recovered `Gzz` response reproduces both anomaly polarity and interference patterns without significant cross-talk, and the residual histogram remains centered near zero.
 
-<p align="center">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_3d/true_3d_x_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_3d/true_3d_y_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/true_slice_3d/true_3d_z_slice.png" width="32%" alt="True 3D slice renderings.">
-</p>
-<p align="center"><em>True 3D slice renderings.</em></p>
-
-<p align="center">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_3d/3d_x_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_3d/3d_y_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/pred_slice_3d/3d_z_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-</p>
-<p align="center"><em>Predicted 3D slice renderings.</em></p>
-
-<p align="center">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/observed_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/forward_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
-</p>
-<p align="center"><em>Observed and forward-modelled Gzz maps.</em></p>
-
-<p align="center">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/residual.png" width="49%" alt="Residual map and residual histogram.">
-  <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/histogram.png" width="49%" alt="Residual map and residual histogram.">
-</p>
-<p align="center"><em>Residual map and residual histogram.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/observed_gzz.png" width="100%" alt="Fig. 14a observed gravity gradient with 5 percent Gaussian noise added.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/forward_gzz.png" width="100%" alt="Fig. 14b predicted gravity gradient.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/residual.png" width="100%" alt="Fig. 14c gravity gradient difference between the observed and predicted data.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20two/Synthetic%20example%20one-two%20prisms%20model/gravity/histogram.png" width="100%" alt="Fig. 14d histogram of the gravity gradient differences.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Observed and predicted gravity gradient data. (a) Observed gravity gradient with 5% Gaussian noise added; (b) predicted gravity gradient; (c) gravity gradient difference between the observed and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
 
 ### Synthetic example one-two staircase models
 
-This example corresponds to Synthetic example one-two staircase models in the manuscript. It is used to evaluate the model's ability to recover sharp faults, layered boundaries, and geological geometries that are closer to piecewise-constant structures.
+This section follows the structurally more complex two-staircase case from the manuscript. The paper uses this model to test whether the network can recover step-like interfaces, sharp geometric breaks, and piecewise-constant density structures with good positional accuracy across 3D views and orthogonal slices.
 
-<p align="center">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/isosurface/isosurface_true.png" width="49%" alt="True and predicted isosurfaces.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/isosurface/isosurface_pred.png" width="49%" alt="True and predicted isosurfaces.">
-</p>
-<p align="center"><em>True and predicted isosurfaces.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/isosurface/isosurface_true.png" width="100%" alt="Fig. 15a synthetic two-staircase model.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/isosurface/isosurface_pred.png" width="100%" alt="Fig. 15b predicted two-staircase model.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>3D view of the two staircase model: (a) synthetic model and (b) predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/voxel_model/voxel_true.png" width="49%" alt="True and predicted voxel models.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/voxel_model/voxel_pred.png" width="49%" alt="True and predicted voxel models.">
-</p>
-<p align="center"><em>True and predicted voxel models.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_slice_3d/true_3d_x_slice.png" width="100%" alt="Fig. 16a 3D view of the synthetic model along x = 2000 m.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_slice_3d/3d_x_slice.png" width="100%" alt="Fig. 16b 3D view of the predicted model along x = 2000 m.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_2d/true_x_slice.png" width="100%" alt="Fig. 16c 2D view of the synthetic model along x = 2000 m.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_2d/x_slice.png" width="100%" alt="Fig. 16d 2D view of the predicted model along x = 2000 m.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the synthetic and predicted density models along x = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_2d/true_x_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_2d/true_y_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_2d/true_z_slice.png" width="32%" alt="True orthogonal slices along x, y, and z.">
-</p>
-<p align="center"><em>True orthogonal slices along x, y, and z.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_slice_3d/true_3d_y_slice.png" width="100%" alt="Fig. 17a 3D view of the synthetic model along y = 2000 m.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_slice_3d/3d_y_slice.png" width="100%" alt="Fig. 17b 3D view of the predicted model along y = 2000 m.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_2d/true_y_slice.png" width="100%" alt="Fig. 17c 2D view of the synthetic model along y = 2000 m.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_2d/y_slice.png" width="100%" alt="Fig. 17d 2D view of the predicted model along y = 2000 m.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the synthetic and predicted density models along y = 2000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_2d/x_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_2d/y_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_2d/z_slice.png" width="32%" alt="Predicted orthogonal slices along x, y, and z.">
-</p>
-<p align="center"><em>Predicted orthogonal slices along x, y, and z.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_slice_3d/true_3d_z_slice.png" width="100%" alt="Fig. 18a 3D view of the synthetic model along z = 1000 m.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_slice_3d/3d_z_slice.png" width="100%" alt="Fig. 18b 3D view of the predicted model along z = 1000 m.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_2d/true_z_slice.png" width="100%" alt="Fig. 18c 2D view of the synthetic model along z = 1000 m.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_2d/z_slice.png" width="100%" alt="Fig. 18d 2D view of the predicted model along z = 1000 m.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the synthetic and predicted density models along z = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
-<p align="center">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_slice_3d/true_3d_x_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_slice_3d/true_3d_y_slice.png" width="32%" alt="True 3D slice renderings.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/true_slice_3d/true_3d_z_slice.png" width="32%" alt="True 3D slice renderings.">
-</p>
-<p align="center"><em>True 3D slice renderings.</em></p>
+The manuscript notes that the predicted `Gzz` field preserves the dominant staircase anomaly pattern, while the residual map lacks coherent staircase-aligned artifacts and the histogram stays nearly symmetric around zero.
 
-<p align="center">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_slice_3d/3d_x_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_slice_3d/3d_y_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/pred_slice_3d/3d_z_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-</p>
-<p align="center"><em>Predicted 3D slice renderings.</em></p>
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/observed_gzz.png" width="100%" alt="Fig. 19a observed gravity gradient with 5 percent Gaussian noise added.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/forward_gzz.png" width="100%" alt="Fig. 19b predicted gravity gradient.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/residual.png" width="100%" alt="Fig. 19c gravity gradient difference between the observed and predicted data.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/histogram.png" width="100%" alt="Fig. 19d histogram of the gravity gradient differences.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Observed and predicted gravity gradient data. (a) Observed gravity gradient with 5% Gaussian noise added; (b) predicted gravity gradient; (c) gravity gradient difference between the observed and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
 
-<p align="center">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/observed_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/forward_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
-</p>
-<p align="center"><em>Observed and forward-modelled Gzz maps.</em></p>
+### Field data example
 
-<p align="center">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/residual.png" width="49%" alt="Residual map and residual histogram.">
-  <img src="examples/example%20three/Synthetic%20example%20one-two%20staircase%20models/gravity/histogram.png" width="49%" alt="Residual map and residual histogram.">
-</p>
-<p align="center"><em>Residual map and residual histogram.</em></p>
+This section follows Section 3.5 of the manuscript and keeps the same figure order as the paper. The field example uses airborne gravity-gradient data acquired in 2008 over the Vinton salt dome in Louisiana, USA, by Bell Geospace. Following the interpretation in the manuscript, the predicted density model reveals a shallow high-density cap-rock with an extent of about `1500 m` in the north-south direction, about `1600 m` in the east-west direction, and a depth range of roughly `260-700 m`.
 
-### Field Data Example
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="Field%20data%20example/Field%20data%20example/gravity/observed_gzz.png" width="100%" alt="Fig. 20a measured airborne gravity gradient data.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="Field%20data%20example/Field%20data%20example/gravity/forward_gzz.png" width="100%" alt="Fig. 20b predicted airborne gravity gradient data.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="Field%20data%20example/Field%20data%20example/gravity/residual.png" width="100%" alt="Fig. 20c airborne gravity gradient differences between the measured and predicted data.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="Field%20data%20example/Field%20data%20example/gravity/histogram.png" width="100%" alt="Fig. 20d histogram of the gravity gradient differences.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Measured and predicted airborne gravity gradient fields. (a) Measured airborne gravity gradient data; (b) predicted airborne gravity gradient data; (c) airborne gravity gradient differences between the measured and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
 
-This section presents the inversion figures of the real data included in `Field data example`. Unlike the synthetic examples above, this part is mainly used to show the predicted density volume, slice views, and the fit between observed and forward-modelled responses under the real `Gzz` input.
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_x_slice.png" width="100%" alt="Fig. 21a 3D slice along x = 2000 m.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="Field%20data%20example/Field%20data%20example/2D%20slice/x_slice.png" width="100%" alt="Fig. 21b 2D slice along x = 2000 m.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_y_slice.png" width="100%" alt="Fig. 21c 3D slice along y = 2000 m.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="Field%20data%20example/Field%20data%20example/2D%20slice/y_slice.png" width="100%" alt="Fig. 21d 2D slice along y = 2000 m.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slices of the predicted density model. (a) 3D slice along x = 2000 m; (b) 2D slice along x = 2000 m; (c) 3D slice along y = 2000 m; and (d) 2D slice along y = 2000 m.</em></p>
 
 <p align="center">
   <img src="Field%20data%20example/Field%20data%20example/3D%20view%20of%20the%20predicted%20density%20model/isosurface_pred.png" width="49%" alt="Predicted density isosurface.">
-  <img src="Field%20data%20example/Field%20data%20example/3D%20view%20of%20the%20predicted%20density%20model/voxel_pred.png" width="49%" alt="Predicted density voxel model.">
 </p>
-<p align="center"><em>Isosurface and voxel views of the predicted density model.</em></p>
-
-<p align="center">
-  <img src="Field%20data%20example/Field%20data%20example/2D%20slice/x_slice.png" width="32%" alt="Predicted orthogonal 2D slices.">
-  <img src="Field%20data%20example/Field%20data%20example/2D%20slice/y_slice.png" width="32%" alt="Predicted orthogonal 2D slices.">
-  <img src="Field%20data%20example/Field%20data%20example/2D%20slice/z_slice.png" width="32%" alt="Predicted orthogonal 2D slices.">
-</p>
-<p align="center"><em>2D slices of the predicted density model along the x, y, and z directions.</em></p>
-
-<p align="center">
-  <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_x_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_y_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-  <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_z_slice.png" width="32%" alt="Predicted 3D slice renderings.">
-</p>
-<p align="center"><em>3D slice renderings of the predicted density model along the x, y, and z directions.</em></p>
-
-<p align="center">
-  <img src="Field%20data%20example/Field%20data%20example/gravity/observed_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
-  <img src="Field%20data%20example/Field%20data%20example/gravity/forward_gzz.png" width="49%" alt="Observed and forward-modelled Gzz maps.">
-</p>
-<p align="center"><em>Comparison between observed Gzz and the Gzz forward-modelled from the predicted density model.</em></p>
-
-<p align="center">
-  <img src="Field%20data%20example/Field%20data%20example/gravity/residual.png" width="49%" alt="Residual map and residual histogram.">
-  <img src="Field%20data%20example/Field%20data%20example/gravity/histogram.png" width="49%" alt="Residual map and residual histogram.">
-</p>
-<p align="center"><em>Residual distribution and residual histogram of the Gzz fit.</em></p>
+<p align="center"><em>3D view of the predicted density model.</em></p>
