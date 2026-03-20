@@ -13,20 +13,20 @@ This network is the hybrid 2D-3D Transformer proposed in the manuscript. It firs
 ```text
 .
 ├── source code/
-�?  ├── train_code.py
-�?  ├── config.py
-�?  └── data_preparation.py
+│   ├── train_code.py
+│   ├── config.py
+│   └── data_preparation.py
 ├── examples/
-�?  ├── example one/
-�?  ├── example two/
-�?  └── example three/
+│   ├── example one/
+│   ├── example two/
+│   └── example three/
 ├── Field data example/
-�?  ├── Gzz.txt
-�?  └── Field data example/
-�?      ├── 2D slice/
-�?      ├── 3D slice/
-�?      ├── 3D view of the predicted density model/
-�?      └── gravity/
+│   ├── Gzz.txt
+│   └── Field data example/
+│       ├── 2D slice/
+│       ├── 3D slice/
+│       ├── 3D view of the predicted density model/
+│       └── gravity/
 ├── test_code/
 ├── best_model.pth
 ├── test_code.py
