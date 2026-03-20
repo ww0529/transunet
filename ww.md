@@ -239,7 +239,7 @@ This section follows Section 3.3 of the manuscript. The benchmark contains a sin
 </table>
 <p align="center"><em>Slice of the synthetic and predicted density models along z = 1000 m. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
 
-The gravity-gradient comparison also follows the manuscript: the forward-modelled `Gzz` field from the predicted density model closely matches the observed field, and the residuals remain small and approximately zero-centered.
+The gravity gradient comparison also follows the manuscript: the forward-modelled `Gzz` field from the predicted density model closely matches the observed field, and the residuals remain small and approximately zero-centered.
 
 <table align="center">
   <tr>
