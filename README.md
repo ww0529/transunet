@@ -140,7 +140,7 @@ python test_code.py \
   --device auto
 ```
 
-The following figures are the high-resolution validation snapshots produced by the scripted validation workflow. These images are already included in the repository for direct inspection.
+The following figures are the Test image produced by the scripted validation workflow. These images are already included in the repository for direct inspection.
 
 <p align="center">
   <img src="test_code/Synthetic%20example%20one-prism%20model.png" width="32%" alt="test.">
