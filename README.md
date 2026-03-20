@@ -48,7 +48,7 @@ This repository currently includes:
 - three synthetic `.vti` examples and their result figures in `examples/`
 - the validation script [`test_code.py`](test_code.py) for testing trained results
 - the real data file `Field data example/Gzz.txt` and the corresponding inversion figures
-- evaluation results stored in `folder_validation_results/`
+- evaluation results stored in `test_code/`
 
 ## Installation
 
