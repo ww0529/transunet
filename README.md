@@ -125,7 +125,8 @@ The code also provides a physics-gradient verification mode:
 python "source code/train_code.py" --verify-only
 ```
 
-Both the manuscript and the code focus on three typical examples: a simple single-prism inversion case, a more complex positive-negative anomaly geological configuration, and a staircase-style terrain case with sharper structural boundaries. The corresponding figures are already bundled in the repository and can be inspected directly without retraining.
+Both the manuscript and the code focus on three typical examples: a Synthetic example one-prism model, a Synthetic example one-two prisms model
+, and a Synthetic example one-two staircase models. The corresponding figures are already bundled in the repository and can be inspected directly without retraining.
 
 ## Run Test Codes
 
