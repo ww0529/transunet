@@ -2,7 +2,7 @@
 ## Network Architecture
 
 <p align="center">
-  <img src="Network%20architecture.jpg" width="88%" alt="Network architecture of the proposed hybrid 2D-3D Transformer.">
+  <img src="Network%20architecture.jpg" width="88%" alt="The architecture of the proposed deep learning convolutional neural network.">
 </p>
 <p align="center"><em>Schematic of the Hybrid 2D-3D Transformer for 3D density gravity inversion proposed in the manuscript.</em></p>
 
