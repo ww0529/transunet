@@ -32,7 +32,7 @@ This network is the hybrid 2D-3D Transformer proposed in the manuscript. It firs
 ├── test_code.py
 └── README.md
 ```
-Here, source code/ contains the core training and data-generation code corresponding to the manuscript method, examples/ and Field data example/ contain real-data examples, and  test_code.py correspond to the scripted validation , respectively. ```
+Here, `source code/` contains the core training and data-generation code corresponding to the manuscript method, `examples/` and `Field data example/` contain the bundled synthetic and field examples, and `test_code.py` provides standalone scripted validation and 3D isosurface export.
 ## Description
 
 This repository is the source-code release corresponding to the manuscript `A Hybrid 2D-3D Transformer Network with Channel-to-Depth Lifting for 3D Density Gravity Inversion(2).docx`. The method is designed for reconstructing three-dimensional density-contrast models from gravity anomaly (`Gz`) or vertical gravity-gradient (`Gzz`) observations.
@@ -45,10 +45,10 @@ This repository currently includes:
 
 - the main training and model-definition code in [`source code/`](source%20code/)
 - the best model checkpoint `best_model.pth` obtained from a 400-epoch training run
-- three synthetic `.vti` examples and their result figures in `examples/`
-- the validation script [`test_code.py`](test_code.py) for testing trained results
+- four bundled synthetic `.vti` examples and their result figures in `examples/`
+- the validation script [`test_code.py`](test_code.py) for standalone 3D-isosurface export
 - the real data file `Field data example/Gzz.txt` and the corresponding inversion figures
-- evaluation results stored in `test_code/`
+- evaluation results stored in `test_code/` as `pred_density.npy` and `isosurface_pred.png`
 
 ## Installation
 
@@ -125,12 +125,18 @@ The code also provides a physics-gradient verification mode:
 python "source code/train_code.py" --verify-only
 ```
 
-Both the manuscript and the code focus on three typical examples: a Synthetic example one-prism model, a Synthetic example one-two prisms model
-, and a Synthetic example one-two staircase models. The repository also includes a fourth synthetic irregular inverted-pyramid example for reference. The corresponding figures are already bundled in the repository and can be inspected directly without retraining.
+Both the manuscript and the code focus on three typical synthetic examples, and the repository also includes a fourth irregular inverted-pyramid benchmark for reference. The corresponding figures are already bundled in the repository and can be inspected directly without retraining.
 
 ## Run Test Codes
 
-To perform scripted validation on the bundled `.vti` examples, use [`test_code.py`](test_code.py). This script loads `best_model.pth`, performs forward modelling to construct the required network input, runs inference on all `.vti` models under `examples/`, and writes `metrics.json`, `summary.csv`, `summary.json`, NumPy arrays, and high-resolution figures to `test_code/`.
+[`test_code.py`](test_code.py) mirrors the 3D isosurface page from `jgui.py` in standalone form. It loads `best_model.pth`, builds the same network input from the bundled examples, runs inference on all `.vti` files under `examples/`, and also processes `Field data example/Gzz.txt`. Each case is exported into its own folder with only `pred_density.npy` and `isosurface_pred.png`.
+
+The rendered density ranges are:
+
+- example one and example three: `0-300 kg/m³`
+- example two: `-300 to 300 kg/m³` with negative anomaly display enabled
+- example four: `0-150 kg/m³`
+- field data: `-100 to 350 kg/m³`
 
 ```bash
 python test_code.py \
@@ -140,14 +146,18 @@ python test_code.py \
   --device auto
 ```
 
-The following figures are the high-resolution outputs produced by the scripted validation workflow. These images are already included in the repository for direct inspection.
+The following figures are the high-resolution outputs produced by the scripted validation workflow.
 
 <p align="center">
-  <img src="test_code/Synthetic%20example%20one-prism%20model.png" width="32%" alt="test.">
-  <img src="test_code/Synthetic%20example%20one-two%20staircase%20models.png" width="32%" alt="test.">
-  <img src="test_code/Synthetic%20example%20one-two%20prisms%20model.png" width="32%" alt="test.">
+  <img src="test_code/01_synthetic_example_one_prism_model/isosurface_pred.png" width="32%" alt="Example one prism model.">
+  <img src="test_code/02_synthetic_example_one_two_prisms_model/isosurface_pred.png" width="32%" alt="Example two prisms model.">
+  <img src="test_code/03_synthetic_example_one_two_staircase_models/isosurface_pred.png" width="32%" alt="Example three staircase model.">
 </p>
-<p align="center"><em>test</em></p></em></p>
+<p align="center">
+  <img src="test_code/04_shifted_inverted_pyramid_test/isosurface_pred.png" width="32%" alt="Example four inverted pyramid model.">
+  <img src="test_code/05_gzz/isosurface_pred.png" width="32%" alt="Field data prediction.">
+</p>
+<p align="center"><em>Standalone 3D isosurface outputs generated by <code>test_code.py</code>.</em></p>
 
 ### Synthetic example one-prism model
 
