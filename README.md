@@ -126,7 +126,7 @@ python "source code/train_code.py" --verify-only
 ```
 
 Both the manuscript and the code focus on three typical examples: a Synthetic example one-prism model, a Synthetic example one-two prisms model
-, and a Synthetic example one-two staircase models. The corresponding figures are already bundled in the repository and can be inspected directly without retraining.
+, and a Synthetic example one-two staircase models. The repository also includes a fourth synthetic irregular inverted-pyramid example for reference. The corresponding figures are already bundled in the repository and can be inspected directly without retraining.
 
 ## Run Test Codes
 
@@ -497,6 +497,122 @@ The manuscript notes that the predicted `Gzz` field preserves the dominant stair
 </table>
 <p align="center"><em>Observed and predicted gravity gradient data. (a) Observed gravity gradient with 5% Gaussian noise added; (b) predicted gravity gradient; (c) gravity gradient difference between the observed and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
 
+### Synthetic example-irregular model of the inverted-pyramid model
+
+This section adds the irregular inverted-pyramid benchmark in the same figure format as the other examples. The model is used to test whether the network can recover an asymmetric body with sloping boundaries and a shifted footprint while keeping the comparison workflow identical.
+
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/isosurface/isosurface_true.png" width="100%" alt="Fig. 20a synthetic irregular inverted-pyramid model.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/isosurface/isosurface_pred.png" width="100%" alt="Fig. 20b predicted irregular inverted-pyramid model.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>3D view of the irregular inverted-pyramid model: (a) synthetic model and (b) predicted model.</em></p>
+
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/true_slice_3d/true_3d_x_slice.png" width="100%" alt="Fig. 21a 3D view of the synthetic model along x slice.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/pred_slice_3d/3d_x_slice.png" width="100%" alt="Fig. 21b 3D view of the predicted model along x slice.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/true_slice_2d/true_x_slice.png" width="100%" alt="Fig. 21c 2D view of the synthetic model along x slice.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/pred_slice_2d/x_slice.png" width="100%" alt="Fig. 21d 2D view of the predicted model along x slice.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the irregular inverted-pyramid model along x. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/true_slice_3d/true_3d_y_slice.png" width="100%" alt="Fig. 22a 3D view of the synthetic model along y slice.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/pred_slice_3d/3d_y_slice.png" width="100%" alt="Fig. 22b 3D view of the predicted model along y slice.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/true_slice_2d/true_y_slice.png" width="100%" alt="Fig. 22c 2D view of the synthetic model along y slice.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/pred_slice_2d/y_slice.png" width="100%" alt="Fig. 22d 2D view of the predicted model along y slice.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the irregular inverted-pyramid model along y. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/true_slice_3d/true_3d_z_slice.png" width="100%" alt="Fig. 23a 3D view of the synthetic model along z slice.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/pred_slice_3d/3d_z_slice.png" width="100%" alt="Fig. 23b 3D view of the predicted model along z slice.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/true_slice_2d/true_z_slice.png" width="100%" alt="Fig. 23c 2D view of the synthetic model along z slice.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/pred_slice_2d/z_slice.png" width="100%" alt="Fig. 23d 2D view of the predicted model along z slice.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Slice of the irregular inverted-pyramid model along z. (a) 3D view of the synthetic model; (b) 3D view of the predicted model; (c) 2D view of the synthetic model; (d) 2D view of the predicted model.</em></p>
+
+The gravity-gradient comparison shows whether the irregular inverted-pyramid anomaly is recovered with the correct shape and sign, while the residuals remain small and the histogram stays centered near zero.
+
+<table align="center">
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/gravity/observed_gzz.png" width="100%" alt="Fig. 24a observed gravity gradient.">
+      <br><em>(a)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/gravity/forward_gzz.png" width="100%" alt="Fig. 24b predicted gravity gradient.">
+      <br><em>(b)</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/gravity/residual.png" width="100%" alt="Fig. 24c gravity gradient residual.">
+      <br><em>(c)</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="examples/example%20four/Synthetic%20example-irregular%20model%20of%20the%20inverted-pyramid%20model/gravity/histogram.png" width="100%" alt="Fig. 24d residual histogram.">
+      <br><em>(d)</em>
+    </td>
+  </tr>
+</table>
+<p align="center"><em>Observed and predicted gravity gradient data. (a) Observed gravity gradient; (b) predicted gravity gradient; (c) gravity gradient difference between the observed and predicted data; and (d) histogram of the gravity gradient differences.</em></p>
+
 ### Field data example
 
 This section follows Section 3.5 of the manuscript and keeps the same figure order as the paper. The field example uses airborne gravity-gradient data acquired in 2008 over the Vinton salt dome in Louisiana, USA, by Bell Geospace. Following the interpretation in the manuscript, the predicted density model reveals a shallow high-density cap-rock with an extent of about `1500 m` in the north-south direction, about `1600 m` in the east-west direction, and a depth range of roughly `260-700 m`.
@@ -504,21 +620,21 @@ This section follows Section 3.5 of the manuscript and keeps the same figure ord
 <table align="center">
   <tr>
     <td align="center" width="50%">
-      <img src="Field%20data%20example/Field%20data%20example/gravity/observed_gzz.png" width="100%" alt="Fig. 20a measured airborne gravity gradient data.">
+      <img src="Field%20data%20example/Field%20data%20example/gravity/observed_gzz.png" width="100%" alt="Fig. 25a measured airborne gravity gradient data.">
       <br><em>(a)</em>
     </td>
     <td align="center" width="50%">
-      <img src="Field%20data%20example/Field%20data%20example/gravity/forward_gzz.png" width="100%" alt="Fig. 20b predicted airborne gravity gradient data.">
+      <img src="Field%20data%20example/Field%20data%20example/gravity/forward_gzz.png" width="100%" alt="Fig. 25b predicted airborne gravity gradient data.">
       <br><em>(b)</em>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="Field%20data%20example/Field%20data%20example/gravity/residual.png" width="100%" alt="Fig. 20c airborne gravity gradient differences between the measured and predicted data.">
+      <img src="Field%20data%20example/Field%20data%20example/gravity/residual.png" width="100%" alt="Fig. 25c airborne gravity gradient differences between the measured and predicted data.">
       <br><em>(c)</em>
     </td>
     <td align="center" width="50%">
-      <img src="Field%20data%20example/Field%20data%20example/gravity/histogram.png" width="100%" alt="Fig. 20d histogram of the gravity gradient differences.">
+      <img src="Field%20data%20example/Field%20data%20example/gravity/histogram.png" width="100%" alt="Fig. 25d histogram of the gravity gradient differences.">
       <br><em>(d)</em>
     </td>
   </tr>
@@ -528,21 +644,21 @@ This section follows Section 3.5 of the manuscript and keeps the same figure ord
 <table align="center">
   <tr>
     <td align="center" width="50%">
-      <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_x_slice.png" width="100%" alt="Fig. 21a 3D slice along x = 2000 m.">
+      <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_x_slice.png" width="100%" alt="Fig. 26a 3D slice along x = 2000 m.">
       <br><em>(a)</em>
     </td>
     <td align="center" width="50%">
-      <img src="Field%20data%20example/Field%20data%20example/2D%20slice/x_slice.png" width="100%" alt="Fig. 21b 2D slice along x = 2000 m.">
+      <img src="Field%20data%20example/Field%20data%20example/2D%20slice/x_slice.png" width="100%" alt="Fig. 26b 2D slice along x = 2000 m.">
       <br><em>(b)</em>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_y_slice.png" width="100%" alt="Fig. 21c 3D slice along y = 2000 m.">
+      <img src="Field%20data%20example/Field%20data%20example/3D%20slice/3d_y_slice.png" width="100%" alt="Fig. 26c 3D slice along y = 2000 m.">
       <br><em>(c)</em>
     </td>
     <td align="center" width="50%">
-      <img src="Field%20data%20example/Field%20data%20example/2D%20slice/y_slice.png" width="100%" alt="Fig. 21d 2D slice along y = 2000 m.">
+      <img src="Field%20data%20example/Field%20data%20example/2D%20slice/y_slice.png" width="100%" alt="Fig. 26d 2D slice along y = 2000 m.">
       <br><em>(d)</em>
     </td>
   </tr>
