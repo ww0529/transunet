@@ -11,8 +11,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.gridspec import GridSpec
 from scipy.ndimage import zoom
+from matplotlib import cm
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 try:
     import torch
@@ -46,119 +47,9 @@ from data_preparation import FastGravityForward
 from train_code import (  
     ComprehensiveLoss,
     DifferentiableForward,
-    HighResVisualizer,
     PhysicsInformedUNet,
     V4Metrics,
 )
-
-
-class FileNamedHighResVisualizer(HighResVisualizer):
-    """Save high-resolution figures with VTI-derived filenames and no titles."""
-
-    @staticmethod
-    def _sanitize_case_name(case_name: str) -> str:
-        invalid = '<>:"/\\|?*'
-        sanitized = "".join("_" if ch in invalid else ch for ch in case_name).strip()
-        return sanitized or "highres_result"
-
-    def save_case_result(
-        self,
-        case_name: str,
-        obs_gravity: np.ndarray,
-        pred_gravity: np.ndarray,
-        true_density: np.ndarray,
-        pred_density: np.ndarray,
-        dx: float = 100.0,
-        dz: float = 100.0,
-    ) -> str:
-        fig = plt.figure(figsize=(16, 14))
-        gs = GridSpec(3, 3, figure=fig, height_ratios=[1, 1.2, 1.5], hspace=0.25, wspace=0.3)
-
-        nz, ny, nx = true_density.shape
-        depth_km = nz * dz / 1000
-
-        obs_up = self._upsample(obs_gravity)
-        pred_up = self._upsample(pred_gravity)
-        residual = obs_gravity - pred_gravity
-        res_up = self._upsample(residual)
-        extent_up = [0, nx * dx / 1000, ny * dx / 1000, 0]
-
-        ax1 = fig.add_subplot(gs[0, 0])
-        vmax = max(abs(obs_up.max()), abs(obs_up.min()))
-        im1 = ax1.imshow(obs_up, cmap="jet", extent=extent_up, vmin=-vmax, vmax=vmax)
-        ax1.set_xlabel("X (km)")
-        ax1.set_ylabel("Y (km)")
-        plt.colorbar(im1, ax=ax1, fraction=0.046, pad=0.04)
-
-        ax2 = fig.add_subplot(gs[0, 1])
-        im2 = ax2.imshow(pred_up, cmap="jet", extent=extent_up, vmin=-vmax, vmax=vmax)
-        ax2.set_xlabel("X (km)")
-        ax2.set_ylabel("Y (km)")
-        plt.colorbar(im2, ax=ax2, fraction=0.046, pad=0.04)
-
-        ax3 = fig.add_subplot(gs[0, 2])
-        res_max = max(abs(res_up.max()), abs(res_up.min()))
-        im3 = ax3.imshow(res_up, cmap="RdBu_r", extent=extent_up, vmin=-res_max, vmax=res_max)
-        ax3.set_xlabel("X (km)")
-        ax3.set_ylabel("Y (km)")
-        plt.colorbar(im3, ax=ax3, fraction=0.046, pad=0.04)
-
-        ax4 = fig.add_subplot(gs[1, 0], projection="3d")
-        self._plot_3d_slices(ax4, true_density, dx, dz, "")
-
-        ax5 = fig.add_subplot(gs[1, 1], projection="3d")
-        self._plot_3d_slices(ax5, pred_density, dx, dz, "")
-
-        ax_info = fig.add_subplot(gs[1, 2])
-        ax_info.axis("off")
-        info_text = (
-            f"Info:\n"
-            f"Enhanced Visualization\n"
-            f"Upsampling: {self.upsampling}x\n"
-            f"DPI: {self.dpi}\n"
-            f"Depth: {depth_km:.2f}km\n"
-            f"\n"
-            f"Grid: {nz}x{ny}x{nx}\n"
-            f"dx: {dx}m, dz: {dz}m\n"
-            f"\n"
-            f"Gravity Range:\n"
-            f"  Obs: [{obs_gravity.min():.2f}, {obs_gravity.max():.2f}]\n"
-            f"  Pred: [{pred_gravity.min():.2f}, {pred_gravity.max():.2f}]\n"
-            f"  RMSE: {np.sqrt(np.mean(residual ** 2)):.4f}"
-        )
-        ax_info.text(
-            0.1,
-            0.9,
-            info_text,
-            transform=ax_info.transAxes,
-            fontsize=10,
-            verticalalignment="top",
-            fontfamily="monospace",
-            bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.5),
-        )
-
-        ax6 = fig.add_subplot(gs[2, 0], projection="3d")
-        self._plot_voxel_body(ax6, true_density, dx, dz, "")
-
-        ax7 = fig.add_subplot(gs[2, 1], projection="3d")
-        self._plot_voxel_body(ax7, pred_density, dx, dz, "")
-
-        ax8 = fig.add_subplot(gs[2, 2])
-        error = np.abs(pred_density - true_density)
-        depth_error = error.mean(axis=(1, 2))
-        depths = np.arange(nz) * dz / 1000
-        ax8.barh(depths, depth_error, height=dz / 1000 * 0.8, color="coral", edgecolor="darkred")
-        ax8.set_xlabel("Mean Absolute Error", fontsize=10)
-        ax8.set_ylabel("Depth (km)", fontsize=10)
-        ax8.invert_yaxis()
-        ax8.grid(True, alpha=0.3)
-
-        safe_name = self._sanitize_case_name(case_name)
-        save_path = Path(self.save_dir) / f"{safe_name}.png"
-        plt.savefig(str(save_path), dpi=self.dpi, bbox_inches="tight", facecolor="white", edgecolor="none")
-        plt.close(fig)
-        print(f"Saved high-res visualization: {save_path}")
-        return str(save_path)
 
 
 def parse_args() -> argparse.Namespace:
@@ -219,6 +110,216 @@ def resolve_device(device_name: str) -> torch.device:
 
 def ensure_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
+
+
+def anomaly_levels(volume: np.ndarray, threshold: float) -> Tuple[float, float]:
+    """Return positive and negative display levels from the data amplitude."""
+    data = np.asarray(volume, dtype=float)
+    finite = data[np.isfinite(data)]
+    if finite.size == 0:
+        return 0.0, 0.0
+    amplitude = float(np.max(np.abs(finite)))
+    level = max(float(threshold), 0.0) * amplitude
+    return level, -level
+
+
+def case_threshold(case_name: str) -> float:
+    """Match the jgui-style threshold split used for the inverted pyramid case."""
+    return 0.15 if "pyramid" in case_name.lower() else 0.30
+
+
+def case_shows_negative(case_name: str) -> bool:
+    """Show negative anomaly surfaces for the two-prism case."""
+    return "prisms" in case_name.lower()
+
+
+def display_range_for_case() -> Tuple[float, float]:
+    """Use the same display range requested for the true density reference."""
+    return -100.0, 350.0
+
+
+def plot_pred_isosurface(
+    volume: np.ndarray,
+    x_range: Tuple[float, float],
+    y_range: Tuple[float, float],
+    z_extent: float,
+    save_path: Path,
+    threshold: float,
+    vmin: float,
+    vmax: float,
+    show_negative: bool,
+) -> None:
+    """Render a jgui-style isosurface PNG for the predicted volume."""
+    fig = plt.figure(figsize=(12, 10))
+    fig.patch.set_facecolor("white")
+    ax = fig.add_subplot(111, projection="3d")
+    ax.clear()
+    ax.set_facecolor("none")
+    ax.xaxis.pane.fill = False
+    ax.yaxis.pane.fill = False
+    ax.zaxis.pane.fill = False
+    ax.xaxis.pane.set_edgecolor((0.8, 0.8, 0.8, 0.3))
+    ax.yaxis.pane.set_edgecolor((0.8, 0.8, 0.8, 0.3))
+    ax.zaxis.pane.set_edgecolor((0.8, 0.8, 0.8, 0.3))
+
+    try:
+        from skimage import measure
+    except ImportError:
+        measure = None
+
+    nz, ny, nx = volume.shape
+    ax.set_xlim(x_range[0], x_range[1])
+    ax.set_ylim(y_range[0], y_range[1])
+    ax.set_zlim(z_extent, 0)
+
+    data_min = float(np.nanmin(volume))
+    data_max = float(np.nanmax(volume))
+    data_range = data_max - data_min
+
+    if data_range < 1e-6:
+        ax.text(
+            0.5, 0.5, 0.5, "No significant anomaly",
+            ha="center", va="center", transform=ax.transAxes,
+        )
+        ax.set_xlabel("X (m)")
+        ax.set_ylabel("Y (m)")
+        ax.set_zlabel("Depth (m)")
+        fig.savefig(save_path, dpi=300, bbox_inches="tight", facecolor="white")
+        plt.close(fig)
+        return
+
+    pos_level, neg_level = anomaly_levels(volume, threshold)
+    norm = plt.Normalize(vmin=vmin, vmax=vmax)
+    surfaces_drawn = 0
+
+    if measure is None:
+        filled = volume > pos_level
+        if show_negative:
+            filled = filled | (volume < neg_level)
+        if filled.any():
+            colors = np.zeros((*volume.shape, 4))
+            nz, ny, nx = volume.shape
+            x = np.linspace(0, x_range[1] - x_range[0], nx + 1)
+            y = np.linspace(0, y_range[1] - y_range[0], ny + 1)
+            z = np.linspace(0, z_extent, nz + 1)
+            X, Y, Z = np.meshgrid(x, y, z, indexing="ij")
+            for iz in range(nz):
+                for iy in range(ny):
+                    for ix in range(nx):
+                        if filled[iz, iy, ix]:
+                            colors[iz, iy, ix] = cm.jet(norm(volume[iz, iy, ix]))
+            ax.voxels(
+                X,
+                Y,
+                Z,
+                np.transpose(filled, (2, 1, 0)),
+                facecolors=np.transpose(colors, (2, 1, 0, 3)),
+                edgecolor="none",
+                alpha=0.8,
+            )
+            surfaces_drawn = 1
+    else:
+        spacing = (
+            z_extent / nz if nz else 1.0,
+            (y_range[1] - y_range[0]) / ny if ny else 1.0,
+            (x_range[1] - x_range[0]) / nx if nx else 1.0,
+        )
+
+        if pos_level < data_max:
+            try:
+                verts, faces, _normals, values = measure.marching_cubes(
+                    volume, level=pos_level, spacing=spacing
+                )
+                verts_plot = np.zeros_like(verts)
+                verts_plot[:, 0] = verts[:, 2] + x_range[0]
+                verts_plot[:, 1] = verts[:, 1] + y_range[0]
+                verts_plot[:, 2] = verts[:, 0]
+                face_values = values[faces].mean(axis=1)
+                face_colors = cm.jet(norm(face_values))
+                mesh = Poly3DCollection(verts_plot[faces], alpha=0.85)
+                mesh.set_facecolor(face_colors)
+                mesh.set_edgecolor("none")
+                ax.add_collection3d(mesh)
+                surfaces_drawn += 1
+            except Exception:
+                pass
+
+        if show_negative and neg_level > data_min:
+            try:
+                verts, faces, _normals, _values = measure.marching_cubes(
+                    volume, level=neg_level, spacing=spacing
+                )
+                verts_plot = np.zeros_like(verts)
+                verts_plot[:, 0] = verts[:, 2] + x_range[0]
+                verts_plot[:, 1] = verts[:, 1] + y_range[0]
+                verts_plot[:, 2] = verts[:, 0]
+                face_colors = cm.jet(norm(vmin))
+                mesh = Poly3DCollection(verts_plot[faces], alpha=0.85)
+                mesh.set_facecolor(face_colors)
+                mesh.set_edgecolor("none")
+                ax.add_collection3d(mesh)
+                surfaces_drawn += 1
+            except Exception:
+                pass
+
+    if surfaces_drawn == 0:
+        ax.text(
+            (x_range[0] + x_range[1]) / 2,
+            (y_range[0] + y_range[1]) / 2,
+            z_extent / 2,
+            "No isosurface\n(adjust threshold)",
+            ha="center",
+            va="center",
+            fontsize=12,
+        )
+
+    mappable = cm.ScalarMappable(norm=norm, cmap="jet")
+    mappable.set_array([vmin, vmax])
+    cbar = fig.colorbar(mappable, ax=ax, shrink=0.6, pad=0.02)
+    cbar.ax.tick_params(direction="in")
+    cbar.ax.set_title("kg/m³", fontsize=12)
+
+    ax.set_xlabel("X (m)")
+    ax.set_ylabel("Y (m)")
+    ax.set_zlabel("Depth (m)")
+    ax.set_title("")
+    ax.view_init(elev=25, azim=225)
+    x_len = x_range[1] - x_range[0]
+    y_len = y_range[1] - y_range[0]
+    z_len = max(z_extent, 1e-6)
+    max_len = max(x_len, y_len, z_len)
+    ax.set_box_aspect([x_len / max_len, y_len / max_len, z_len / max_len])
+
+    fig.savefig(save_path, dpi=300, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+
+
+def save_prediction_artifacts(
+    case_dir: Path,
+    case_name: str,
+    pred_density: np.ndarray,
+    dx: float,
+    dz: float,
+) -> None:
+    ensure_dir(case_dir)
+    np.save(case_dir / "pred_density.npy", pred_density)
+    threshold = case_threshold(case_name)
+    vmin, vmax = display_range_for_case()
+    show_negative = case_shows_negative(case_name)
+    z_extent = float(pred_density.shape[0]) * float(dz)
+    x_range = (0.0, float(pred_density.shape[2]) * float(dx))
+    y_range = (0.0, float(pred_density.shape[1]) * float(dx))
+    plot_pred_isosurface(
+        pred_density,
+        x_range,
+        y_range,
+        z_extent,
+        case_dir / "isosurface_pred.png",
+        threshold,
+        vmin,
+        vmax,
+        show_negative,
+    )
 
 
 def extract_state_dict(checkpoint: Any) -> Any:
@@ -392,20 +493,6 @@ def tensor_to_numpy(tensor: torch.Tensor) -> np.ndarray:
     return tensor.detach().cpu().numpy()
 
 
-def save_case_arrays(case_dir: Path, outputs: np.ndarray, targets: np.ndarray, obs_gravity: np.ndarray, pred_gravity: np.ndarray) -> None:
-    ensure_dir(case_dir)
-    np.save(case_dir / "pred_density.npy", outputs)
-    np.save(case_dir / "true_density.npy", targets)
-    np.save(case_dir / "obs_gravity.npy", obs_gravity)
-    np.save(case_dir / "pred_gravity.npy", pred_gravity)
-
-
-def save_case_metrics(case_dir: Path, metrics: Dict[str, Any]) -> None:
-    ensure_dir(case_dir)
-    with open(case_dir / "metrics.json", "w", encoding="utf-8") as f:
-        json.dump(metrics, f, indent=2, ensure_ascii=True)
-
-
 def write_summary(output_dir: Path, rows: List[Dict[str, Any]]) -> None:
     ensure_dir(output_dir)
     json_path = output_dir / "summary.json"
@@ -438,7 +525,6 @@ def evaluate_folder_models(
     forward_op = DifferentiableForward(cfg.grid_shape, cfg.dx, cfg.dz).to(device)
     criterion = ComprehensiveLoss(cfg, forward_op)
     metrics = V4Metrics()
-    visualizer = FileNamedHighResVisualizer(str(output_dir), dpi=220, upsampling=2)
 
     model.eval()
     total_loss = 0.0
@@ -484,8 +570,7 @@ def evaluate_folder_models(
             case_losses.append(float(sample_loss.item()))
 
             case_dir = output_dir / f"{case_index:02d}_{name.lower().replace(' ', '_')}"
-            save_case_arrays(case_dir, pred_np, true_np, obs_np, pred_grav_np)
-            visualizer.save_case_result(name, obs_np, pred_grav_np, true_np, pred_np, cfg.dx, cfg.dz)
+            save_prediction_artifacts(case_dir, name, pred_np, cfg.dx, cfg.dz)
 
             row = {
                 "report_type": "case",
@@ -503,7 +588,6 @@ def evaluate_folder_models(
                 "true_min": float(true_np.min()),
                 "true_max": float(true_np.max()),
             }
-            save_case_metrics(case_dir, row)
             rows.append(row)
             case_index += 1
 
