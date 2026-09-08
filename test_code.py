@@ -865,7 +865,7 @@ def case_density_range(
         return -300.0 * amplitude, 300.0 * amplitude
 
     if "example four" in text or "inverted_pyramid" in text:
-        return 0.0, 150.0
+        return 0.0, 300.0
 
     return 0.0, 300.0 * amplitude
 
