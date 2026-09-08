@@ -133,9 +133,9 @@ Both the manuscript and the code focus on three typical synthetic examples, and 
 
 The rendered density ranges are:
 
-- example one and example three: `0-300 kg/m³`
+- example one and example four: `0-300 kg/m³`
 - example two: `-300 to 300 kg/m³` 
-- example four: `0-150 kg/m³`
+- example three: `0-150 kg/m³`
 - field data: `-100 to 350 kg/m³`
 
 ```bash
